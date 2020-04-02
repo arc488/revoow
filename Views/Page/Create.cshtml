@@ -1,0 +1,37 @@
+﻿@model CreateViewModel
+
+
+<form id="detail" asp-controller="Page" asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <div class="col-md-4 p-2 border">
+        <div class="form-group">
+            <label asp-for="CompanyName"></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <i class="input-group-text fa fa-user"></i>
+                </div>
+                <input readonly asp-for="CompanyName" class="form-control" type="text" />
+
+            </div>
+            <div><span asp-validation-for="CompanyName" class="text-danger"></span></div>
+        </div>
+
+
+        <div class="form-group">
+            <label asp-for="Logo"></label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <i class="input-group-text fa fa-truck"></i>
+                </div>
+                <input type="file" name="file" asp-for="Logo" />
+            </div>
+            <div><span asp-validation-for="Logo" class="text-danger"></span></div>
+        </div>
+
+
+        <div class="form-group text-center pt-2">
+            <input type="submit" class="btn btn-primary">Create</>
+        </div>
+
+    </div>
+</form>

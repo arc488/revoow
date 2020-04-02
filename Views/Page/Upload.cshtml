@@ -1,0 +1,122 @@
+﻿@model UploadViewModel
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Upload</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/scripts/starRating.js"></script>
+    <link href="~/css/upload.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/4ff92ff337.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="company">
+            <img class="card-img-top" src="data:image;base64,@Convert.ToBase64String(Model.Logo)" />
+        </div>
+        <div class="instructions">
+            <div class="row">
+                <div class="col-md-3">
+                    <i class="number">1</i>
+                    <br />
+                    1. Say your first name only
+                </div>
+                <div class="col-md-3">
+                    <i class="number">2</i>
+                    <br />
+                    2. Mention the company or service you just used.
+                </div>
+                <div class="col-md-3">
+                    <i class="number">3</i>
+                    <br />
+                    3. Briefly talk about the quality of the service or product.
+                </div>
+
+            </div>
+            <div class="row">
+                <span>
+                    Click for example video
+                </span>
+            </div>
+        </div>
+        <div class="video">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="firstname">Please enter your first name</label>
+                    <div class="input-group input-group-lg">
+                        <input id="firstname" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <video id="gum" playsinline autoplay></video>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="row">
+                    <button id="start">
+                        <i class="fa fa-video-camera fa-lg"></i>
+                    </button>
+                    <button id="record" disabled>
+                        <i class="fa fa-circle fa-lg"></i>
+                    </button>
+                    <button id="play" disabled>
+                        <i class="fa fa-play fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <span id="errorMsg"></span>
+            </div>
+
+        </div>
+        <div class="rating">
+            <div class="row">
+                <!-- Rating Stars Box -->
+                <div class='rating-stars text-center'>
+                    <ul id='stars'>
+                        <li class='star' title='Poor' data-value='1'>
+                            <i class='fa fa-star fa-fw'></i>
+                        </li>
+                        <li class='star' title='Fair' data-value='2'>
+                            <i class='fa fa-star fa-fw'></i>
+                        </li>
+                        <li class='star' title='Good' data-value='3'>
+                            <i class='fa fa-star fa-fw'></i>
+                        </li>
+                        <li class='star' title='Excellent' data-value='4'>
+                            <i class='fa fa-star fa-fw'></i>
+                        </li>
+                        <li class='star' title='WOW!!!' data-value='5'>
+                            <i class='fa fa-star fa-fw'></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class='success-box'>
+                    <div class='text-message'></div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-video">
+            <div class="row">
+                <button id="upload" type="submit" class="btn btn-primary btn-lg">Submit Your Video</button>
+            </div>
+        </div>
+    </div>
+    <input id="pageId" hidden value="@Model.PageId" />
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="~/scripts/video.js" async></script>
+    <script src="~/scripts/starRating.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿body {
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+.add-testimonial {
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.company-info {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+    .company-info #company-name {
+        font-weight: bold;
+        font-size: 35px;
+    }
+
+    .company-info #company-rating i {
+        color: gold;
+        font-size: 2em;
+    }
+
+    .company-info #company-link {
+        margin-top: 20px;
+    }
+
+.videos {
+    text-align: center;
+}
+
+    .videos .card-header {
+        font-weight: bold;
+        font-size: 1.5em;
+    }
+
+    .videos .video-rating {
+        color: gold;
+        font-size: 1.7em;
+    }
