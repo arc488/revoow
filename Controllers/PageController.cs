@@ -20,13 +20,19 @@ namespace Revoow.Controllers
         private readonly IPageRepository pageRepository;
         private readonly ITestimonialRepository testimonialRepository;
         private readonly VideoUploadService uploadService;
+        private readonly GenerateThumbnailService thumbnailService;
         private readonly IMapper mapper;
 
-        public PageController(IPageRepository pageRepository, ITestimonialRepository testimonialRepository, VideoUploadService uploadService, IMapper mapper)
+        public PageController(IPageRepository pageRepository, 
+                              ITestimonialRepository testimonialRepository, 
+                              VideoUploadService uploadService, 
+                              GenerateThumbnailService thumbnailService,
+                              IMapper mapper)
         {
             this.pageRepository = pageRepository;
             this.testimonialRepository = testimonialRepository;
             this.uploadService = uploadService;
+            this.thumbnailService = thumbnailService;
             this.mapper = mapper;
         }
 
@@ -78,13 +84,13 @@ namespace Revoow.Controllers
         public IActionResult UploadVideo()
         {
             //filename is current time stripped of all non numbers
-            var fileName = Regex.Replace(DateTime.Now.ToString(), "[^0-9]", "") + ".webm";
+            var fileName = Regex.Replace(DateTime.Now.ToString(), "[^0-9]", "");
             var file = Request.Form.Files[0];
             var ratingValue = Request.Form["ratingValue"];
             var firstName = Request.Form["firstName"];
             var pageId = Request.Form["pageId"];
 
-            var filePath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), fileName);
+            var filePath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), fileName + ".webm");
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -100,9 +106,10 @@ namespace Revoow.Controllers
                 ReviewerName = firstName
             };
 
+            thumbnailService.GenerateThumbnail(fileName);
+
             testimonialRepository.Add(testimonial);
              
-            UploadToYoutube(fileName);
             return View("Upload");
         }
 

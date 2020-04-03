@@ -40,6 +40,7 @@ namespace Revoow
             services.AddScoped<IPageRepository, PageRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddScoped<VideoUploadService>();
+            services.AddScoped<GenerateThumbnailService>();
 
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
