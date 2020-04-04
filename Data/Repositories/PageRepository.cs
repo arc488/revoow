@@ -19,7 +19,7 @@ namespace Revoow.Data.Repositories
         {
             var page = appDbContext.Pages
                         .Include(p => p.Testimonials)
-                        .FirstOrDefault(p => p.CompanyName == companyName);   
+                        .FirstOrDefault(p => p.CompanyName == companyName);
             return page;
         }
     }

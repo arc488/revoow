@@ -12,5 +12,6 @@ namespace Revoow.ViewModels.Revoow
         public string CompanyName { get; set; }
         public string RevoowURL { get; set; }
         public Testimonial[] Testimonials { get; set; }
+        public int CompanyRating { get; set; }
     }
 }

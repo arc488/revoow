@@ -8,5 +8,6 @@ namespace Revoow.Data.IRepositories
 {
     public interface ITestimonialRepository : IRepository<Testimonial>
     {
+
     }
 }

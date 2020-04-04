@@ -14,5 +14,9 @@ namespace Revoow.Models
         public string CompanyName { get; set; }
         public string PageURL { get; set; }
         public List<Testimonial> Testimonials { get; set; }
+        public int CompanyRating
+        {
+            get => (int)Math.Round(Testimonials.Select(t => t.Rating).Average());
+        }
     }
 }
