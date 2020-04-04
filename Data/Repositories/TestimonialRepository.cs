@@ -12,5 +12,6 @@ namespace Revoow.Data.Repositories
         public TestimonialRepository(AppDbContext appDbContext) : base(appDbContext)
         {
         }
+
     }
 }

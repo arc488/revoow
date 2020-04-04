@@ -13,6 +13,6 @@ namespace Revoow.Models
         public byte[] Logo { get; set; }
         public string CompanyName { get; set; }
         public string PageURL { get; set; }
-
+        public List<Testimonial> Testimonials { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace Revoow.ViewModels.Revoow
         public byte[] Logo { get; set; }
         public string CompanyName { get; set; }
         public string RevoowURL { get; set; }
+
     }
 }

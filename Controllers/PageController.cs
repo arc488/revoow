@@ -19,20 +19,17 @@ namespace Revoow.Controllers
     {
         private readonly IPageRepository pageRepository;
         private readonly ITestimonialRepository testimonialRepository;
-        private readonly VideoUploadService uploadService;
-        private readonly GenerateThumbnailService thumbnailService;
+        private readonly VideoService videoService;
         private readonly IMapper mapper;
 
         public PageController(IPageRepository pageRepository, 
                               ITestimonialRepository testimonialRepository, 
-                              VideoUploadService uploadService, 
-                              GenerateThumbnailService thumbnailService,
+                              VideoService videoService,
                               IMapper mapper)
         {
             this.pageRepository = pageRepository;
             this.testimonialRepository = testimonialRepository;
-            this.uploadService = uploadService;
-            this.thumbnailService = thumbnailService;
+            this.videoService = videoService;
             this.mapper = mapper;
         }
 
@@ -69,6 +66,7 @@ namespace Revoow.Controllers
             var page = this.pageRepository.GetByName(companyName);
             if (page == null) return NotFound();
             var viewModel = this.mapper.Map<Page, DetailViewModel>(page);
+
             return View(viewModel);
         }
 
@@ -83,39 +81,36 @@ namespace Revoow.Controllers
         [HttpPost("/page/upload")]
         public IActionResult UploadVideo()
         {
-            //filename is current time stripped of all non numbers
-            var fileName = Regex.Replace(DateTime.Now.ToString(), "[^0-9]", "");
             var file = Request.Form.Files[0];
-            var ratingValue = Request.Form["ratingValue"];
-            var firstName = Request.Form["firstName"];
-            var pageId = Request.Form["pageId"];
+            var ratingValue = Int32.Parse(Request.Form["ratingValue"]);
+            var reviewerName = Request.Form["reviewerName"].ToString();
+            var pageId = Int32.Parse(Request.Form["pageId"]);
+            var companyName = Request.Form["companyName"];
 
-            var filePath = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), fileName + ".webm");
+            var page = pageRepository.GetById(pageId);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-
-            }
-
+            videoService.SaveVideo(file);
+            var thumbnail = videoService.GenerateThumbnail();
             var testimonial = new Testimonial()
             {
-                PageId = Int32.Parse(pageId),
-                Rating = Int32.Parse(ratingValue),
-                VideoName = fileName,
-                ReviewerName = firstName
+                PageId = pageId,
+                Rating = ratingValue,
+                VideoName = videoService.fileName,
+                VideoPath = videoService.videoPath,
+                VideoThumbnail = thumbnail,
+                ReviewerName = reviewerName
             };
-
-            thumbnailService.GenerateThumbnail(fileName);
-
             testimonialRepository.Add(testimonial);
-             
-            return View("Upload");
+            page.Testimonials.Add(testimonial);
+            pageRepository.Update(page);
+
+            return Redirect("/" + companyName);
+
         }
 
         public void UploadToYoutube(string fileName)
         {
-            this.uploadService.Run(fileName).Wait();
+            //this.uploadService.Run(fileName).Wait();
             
         }
 

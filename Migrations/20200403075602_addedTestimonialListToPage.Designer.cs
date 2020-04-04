@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Revoow.Data;
 
 namespace Revoow.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200403075602_addedTestimonialListToPage")]
+    partial class addedTestimonialListToPage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +51,7 @@ namespace Revoow.Migrations
 
                     b.HasKey("PageId");
 
-                    b.ToTable("Pages");
+                    b.ToTable("LandingPages");
                 });
 
             modelBuilder.Entity("Revoow.Models.Testimonial", b =>

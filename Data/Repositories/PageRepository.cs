@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Revoow.Data.Repositories
 {
@@ -16,7 +17,9 @@ namespace Revoow.Data.Repositories
 
         public Page GetByName(string companyName)
         {
-            var page = this.entities.FirstOrDefault(p => p.CompanyName == companyName);
+            var page = appDbContext.Pages
+                        .Include(p => p.Testimonials)
+                        .FirstOrDefault(p => p.CompanyName == companyName);   
             return page;
         }
     }

@@ -16,7 +16,7 @@ namespace Revoow.Data
             HttpContextAccessor = httpContextAccessor;
         }
 
-        public DbSet<Page> LandingPages { get; set; }
+        public DbSet<Page> Pages { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
         public IHttpContextAccessor HttpContextAccessor { get; }
 
@@ -39,7 +39,7 @@ namespace Revoow.Data
                 if (entityEntry.State == EntityState.Modified)
                 {
                     entityEntry.Property("CreatedBy").IsModified = false;
-                    entityEntry.Property("DateCreated").IsModified = false;
+                    entityEntry.Property("TimeCreated").IsModified = false;
                 }
 
                 if (entityEntry.State == EntityState.Added)

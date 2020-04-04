@@ -11,6 +11,7 @@ namespace Revoow.Models
         public int PageId { get; set; }
         public int Rating { get; set; }
         public string VideoName { get; set; }
+        public string VideoPath { get; set; }
         public byte[] VideoThumbnail { get; set; }
         public string ReviewerName { get; set; }
     }

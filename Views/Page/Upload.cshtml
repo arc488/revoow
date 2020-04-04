@@ -51,7 +51,7 @@
                 <div class="col-md-4">
                     <label for="firstname">Please enter your first name</label>
                     <div class="input-group input-group-lg">
-                        <input id="firstname" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                        <input id="reviewerName" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                     </div>
                 </div>
             </div>
@@ -114,6 +114,7 @@
         </div>
     </div>
     <input id="pageId" hidden value="@Model.PageId" />
+    <input id="companyName" hidden value="@Model.CompanyName" />
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="~/scripts/video.js" async></script>
     <script src="~/scripts/starRating.js"></script>

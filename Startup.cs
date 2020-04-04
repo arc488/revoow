@@ -39,8 +39,7 @@ namespace Revoow
             //.EnableSensitiveDataLogging(true));
             services.AddScoped<IPageRepository, PageRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
-            services.AddScoped<VideoUploadService>();
-            services.AddScoped<GenerateThumbnailService>();
+            services.AddTransient<VideoService>();
 
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());

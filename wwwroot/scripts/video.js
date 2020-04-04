@@ -11,8 +11,9 @@ const errorMsgElement = document.querySelector("span#errorMsg");
 const recordedVideo = document.querySelector("video#recorded");
 const recordButton = document.querySelector("button#record");
 const uploadButton = document.querySelector("button#upload");
-const firstnameInput = document.querySelector("input#firstname");
+const reviewerNameInput = document.querySelector("input#reviewerName");
 const pageIdInput = document.querySelector("input#pageId");
+const companyNameInput = document.querySelector("input#companyName");
 
 
 recordButton.addEventListener("click", () => {
@@ -39,14 +40,13 @@ playButton.addEventListener("click", () => {
 
 uploadButton.addEventListener("click", () => {
     var blob = new Blob(recordedBlobs, { type: "video/webm" });
-    var firstName = firstnameInput.textContent;
-    var pageId = pageIdInput.value;
     var formData = new FormData();
 
     formData.append("video-blob", blob);
     formData.append("ratingValue", ratingValue);
-    formData.append("firstName", firstName);
-    formData.append("pageId", pageId); 
+    formData.append("reviewerName", reviewerNameInput.value);
+    formData.append("pageId", pageIdInput.value); 
+    formData.append("companyName", companyNameInput.value); 
 
     var request = new XMLHttpRequest();
     request.open("POST", "/Page/Upload");
