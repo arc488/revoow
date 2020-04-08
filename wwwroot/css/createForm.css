@@ -1,0 +1,19 @@
+﻿
+.create-form i {
+    width: auto;
+    font-size: 1.5em;
+}
+
+#revoowURL {
+    font-size: 1em;
+}
+
+.falseinput {
+    margin: 0px;
+    width: 50%;
+    position: relative;
+}
+
+#fileName {
+    text-align: center;
+}

@@ -38,31 +38,8 @@ namespace Revoow.Controllers
             return View();
         }
 
-        public IActionResult Create()
-        {
-            var viewModel = new CreateViewModel();
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult Create(CreateViewModel viewModel, IFormFile file)
-        {
-            var page = this.mapper.Map<CreateViewModel, Page>(viewModel);
-
-            using (var ms = new MemoryStream())
-            {
-                file.CopyTo(ms);
-                page.Logo = ms.ToArray();
-            };
-
-            this.pageRepository.Add(page);
-
-            return View();
-        }
-
         public IActionResult Detail(string companyName)
         {
-            Debug.WriteLine("Company name string is " + companyName);
             var page = this.pageRepository.GetByName(companyName);
             if (page == null) return NotFound();
             var viewModel = this.mapper.Map<Page, DetailViewModel>(page);
@@ -79,7 +56,7 @@ namespace Revoow.Controllers
         }
 
         [HttpPost("/page/upload")]
-        public IActionResult UploadVideo()
+        public IActionResult Upload()
         {
             var file = Request.Form.Files[0];
             var ratingValue = Int32.Parse(Request.Form["ratingValue"]);
