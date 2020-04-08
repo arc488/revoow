@@ -24,7 +24,7 @@ namespace Revoow.Validations
             if (result > 0)
             {
                 Debug.WriteLine("Validation failed");
-                return new ValidationResult("This company name is already in use.");
+                return new ValidationResult("This company name is taken.");
             };
             Debug.WriteLine("Validation successful");
             return ValidationResult.Success;
