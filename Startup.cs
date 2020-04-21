@@ -11,11 +11,17 @@ using Revoow.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Revoow.Areas.Identity;
 
 namespace Revoow
 {
@@ -33,18 +39,36 @@ namespace Revoow
         {
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
+            services.AddRazorPages();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddDbContext<AppDbContext>(options => options
-                                                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //.EnableSensitiveDataLogging(true));
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>(
+                options =>
+                {
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsRevoowUser", policy => policy.RequireRole("RevoowUser"));
+            });
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie();
+            
             services.AddScoped<IPageRepository, PageRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddTransient<VideoService>();
-
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
-        }
 
+
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -60,19 +84,21 @@ namespace Revoow
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(name: "reviewPage",
+                endpoints.MapControllerRoute(
+                    name: "reviewPage",
                     pattern: "{companyName}/{action=Detail}",
                     defaults: new { controller = "Page" });
+                endpoints.MapRazorPages();
             });
         }
     }

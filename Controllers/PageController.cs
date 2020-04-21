@@ -12,6 +12,7 @@ using Revoow.Models;
 using Revoow.ViewModels.Revoow;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Revoow.Controllers
 {
@@ -83,12 +84,6 @@ namespace Revoow.Controllers
 
             return Redirect("/" + companyName);
 
-        }
-
-        public void UploadToYoutube(string fileName)
-        {
-            //this.uploadService.Run(fileName).Wait();
-            
         }
 
     }

@@ -16,7 +16,11 @@ namespace Revoow.Models
         public List<Testimonial> Testimonials { get; set; }
         public int CompanyRating
         {
-            get => (int)Math.Round(Testimonials.Select(t => t.Rating).Average());
+            get
+            {
+                if (Testimonials.Count > 0) return (int)Math.Round(Testimonials.Select(t => t.Rating).Average());
+                else return 5;
+            }
         }
     }
 }

@@ -19,7 +19,7 @@
                         <div class="input-group-prepend">
                             <i class="input-group-text fa fa-font"></i>
                         </div>
-                        <input asp-for="CompanyName" class="form-control" type="text" />
+                        <input asp-for="CompanyName" onkeypress="return alphanumericSpaceOnly()" class="form-control" type="text" />
 
                     </div>
                     <div><span asp-validation-for="CompanyName" class="text-danger"></span></div>
@@ -31,7 +31,7 @@
                         <div class="input-group-prepend">
                             <i id="revoowURL" class="input-group-text">www.revoow.com/</i>
                         </div>
-                        <input asp-for="PageURL" class="form-control" type="text" />
+                        <input asp-for="PageURL" onkeypress="return alphanumericOnly()" class="form-control" type="text" />
 
                     </div>
                     <div><span asp-validation-for="PageURL" class="text-danger"></span></div>
@@ -61,5 +61,6 @@
     </form>
 
 </div>
+<script src="~/scripts/inputLimitations.js"></script>
 <script src="~/scripts/browseFiles.js"></script>
 <script src="~/scripts/isUnique.js"></script>
