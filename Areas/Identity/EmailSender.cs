@@ -5,6 +5,7 @@ using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,8 +35,13 @@ namespace Revoow.Areas.Identity
                 HtmlContent = message
             };
             msg.AddTo(new EmailAddress(email));
+            var response = await client.SendEmailAsync(msg);
 
-            await client.SendEmailAsync(msg);
+            Debug.WriteLine("Status code: " + response.StatusCode);
+            Debug.WriteLine(response.Body.ReadAsStringAsync().Result); // The message will be here
+            Debug.WriteLine(response.Headers.ToString());
+
+
         }
     }
 }
