@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Revoow.Areas.Identity
 {
-    public class RevoowUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>
+    public class RevoowUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<RevoowUser, IdentityRole>
     {
         public RevoowUserClaimsPrincipalFactory(
-            UserManager<IdentityUser> userManager,
+            UserManager<RevoowUser> userManager,
             RoleManager<IdentityRole> roleManager, 
             IOptions<IdentityOptions> options) : 
             base(userManager, roleManager, options)

@@ -37,6 +37,7 @@ namespace Revoow.Areas.Identity
             msg.AddTo(new EmailAddress(email));
             var response = await client.SendEmailAsync(msg);
 
+            Debug.WriteLine("This is the api: " + this.apiKey);
             Debug.WriteLine("Status code: " + response.StatusCode);
             Debug.WriteLine(response.Body.ReadAsStringAsync().Result); // The message will be here
             Debug.WriteLine(response.Headers.ToString());

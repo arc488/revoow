@@ -16,6 +16,7 @@ namespace Revoow.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
             });
+
         }
     }
 }

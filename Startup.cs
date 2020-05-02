@@ -44,7 +44,7 @@ namespace Revoow
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddDbContext<AppDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>(
+            services.AddIdentity<RevoowUser, IdentityRole>(
                 options =>
                 {
                     options.Password.RequireNonAlphanumeric = false;
