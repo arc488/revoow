@@ -1,22 +1,27 @@
 ﻿body {
-    margin-right: 20%;
-    margin-left: 20%;
+    font: 15px Verdana;
 }
-
 
 .container {
     content: flex;
 }
 
 .company {
+    text-align:center;
+}
+
+.company img {
+    max-height: 200px;
+    width: auto;
 }
 
 .instructions .row {
     justify-content: center;
     text-align: center;
+    color: white;
     padding-top: 20px;
     padding-bottom: 20px;
-    background: #C2DBF4;
+    background: #007bff;
 }
 
     .instructions .row span {
@@ -26,33 +31,38 @@
 .number {
     text-align: center;
     font-style: normal;
-    font-size: 50px;
+    font-size: 60px;
     font-weigth: 1000;
-    color: white;
+    color: black;
     display: inline-block;
     height: 80px;
     width: 80px;
     border-radius: 50%;
-    background: #056AD2;
+    background: white;
     margin-top: 15px;
     margin-bottom: 15px;
 }
 
 .video .row {
     justify-content: center;
-    background: #277ED8;
+    background: #ffffff;
     text-align: center;
     padding-top: 40px;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
 
+    .video .row label {
+        font-size: 1.5em;
+    }
+
 video {
     width: 100%;
     border-style: solid;
-    border-width: 4px;
-    border-color: #FF1654;
+    border-width: 1px;
+    border-color: black;
     background: black;
+    box-shadow: 10px 5px 10px rgba(0,0,0,0.4);
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
@@ -81,7 +91,7 @@ video {
 }
 
 .rating .row {
-    background: #68A5E5;
+    background: #007bff;
     justify-content: center;
 }
 
@@ -117,7 +127,7 @@ video {
         /* Idle State of the stars */
         .rating-stars ul > li.star > i.fa {
             font-size: 2.5em; /* Change the size of the stars */
-            color: #ccc; /* Color on idle state */
+            color: white; /* Color on idle state */
         }
 
         /* Hover state of the stars */

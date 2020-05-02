@@ -41,23 +41,7 @@ namespace Revoow
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
             services.AddRazorPages();
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddDbContext<AppDbContext>(options => options
-                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<RevoowUser, IdentityRole>(
-                options =>
-                {
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                })
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders()
-                .AddRoles<IdentityRole>();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("IsRevoowUser", policy => policy.RequireRole("RevoowUser"));
-            });
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //    .AddCookie();
             

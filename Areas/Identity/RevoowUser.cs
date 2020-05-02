@@ -9,7 +9,7 @@ namespace Revoow.Areas.Identity
     public class RevoowUser : IdentityUser
     {
         public int MaxVideos { get; set; }
-        public AccountType AccounntType { get; set; }
+        public AccountType AccountType { get; set; }
     }
 
     public enum AccountType
