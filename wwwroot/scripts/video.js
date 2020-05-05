@@ -39,6 +39,8 @@ playButton.addEventListener("click", () => {
 });
 
 uploadButton.addEventListener("click", () => {
+    
+    disableCamera();
     var blob = new Blob(recordedBlobs, { type: "video/webm" });
     var formData = new FormData();
 
@@ -51,7 +53,29 @@ uploadButton.addEventListener("click", () => {
     var request = new XMLHttpRequest();
     request.open("POST", "/Page/Upload");
     request.send(formData);
+    handleRequestSent(request);
+
+
 });
+function disableCamera() {
+    window.stream.getTracks().forEach(function (track) {
+        track.stop();
+    });
+}
+function handleRequestSent(request) {
+    request.addEventListener("readystatechange", function () {
+        console.log(this);
+        if (this.readyState === 4) {
+            var responseData = JSON.parse(this.responseText);
+            console.log(responseData.url);
+            redirectToPage(responseData.url);
+        };
+    });
+}
+
+function redirectToPage(redirectUrl) {
+    window.location.href = redirectUrl;
+}
 
 function handleSourceOpen(event) {
     console.log("MediaSource opened");

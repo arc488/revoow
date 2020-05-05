@@ -10,6 +10,7 @@ namespace Revoow.Data.IRepositories
     {
 
         Page GetByName(string companyName);
+        Page GetByUrl(string pageUrl);
 
     }
 }

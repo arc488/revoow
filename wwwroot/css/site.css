@@ -58,7 +58,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-    font-size: 14px;
+    font: 15px Verdana;
 }
 
 @media (min-width: 768px) {

@@ -1,4 +1,8 @@
 ﻿
+html {
+    font: 15px Verdana;
+}
+
 .create-form i {
     width: auto;
     font-size: 1.5em;

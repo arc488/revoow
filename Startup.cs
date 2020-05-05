@@ -48,6 +48,7 @@ namespace Revoow
             services.AddScoped<IPageRepository, PageRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddTransient<VideoService>();
+            services.AddTransient<PaymentService>();
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
 
@@ -80,7 +81,7 @@ namespace Revoow
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "reviewPage",
-                    pattern: "{companyName}/{action=Detail}",
+                    pattern: "{pageUrl}/{action=Detail}",
                     defaults: new { controller = "Page" });
                 endpoints.MapRazorPages();
             });

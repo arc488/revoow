@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewData["Title"] = "Success";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script type="text/javascript"> 
+        var session = '@(ViewBag.sessionId)';
+        console.log(session);
+    </script>
+<h1>Pay</h1>
+<script src="~/scripts/stripeCheckout.js"></script>

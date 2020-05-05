@@ -22,5 +22,13 @@ namespace Revoow.Data.Repositories
                         .FirstOrDefault(p => p.CompanyName == companyName);
             return page;
         }
+
+        public Page GetByUrl(string pageUrl)
+        {
+            var page = appDbContext.Pages
+                        .Include(p => p.Testimonials)
+                        .FirstOrDefault(p => p.PageURL == pageUrl);
+            return page;
+        }
     }
 }

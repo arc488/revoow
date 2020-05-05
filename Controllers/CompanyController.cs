@@ -49,7 +49,7 @@ namespace Revoow.Controllers
             };
 
             this.pageRepository.Add(page);
-            return RedirectToAction("Create");
+            return Redirect("~/" + page.PageURL);
         }
 
         public CreateViewModel CreateViewModel()

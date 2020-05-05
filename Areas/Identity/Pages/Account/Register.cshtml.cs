@@ -61,6 +61,9 @@ namespace Revoow.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public AccountType AccountType { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -72,6 +75,7 @@ namespace Revoow.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            var redirectUrl = "/Payment/Pay/" + Input.AccountType;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -99,7 +103,7 @@ namespace Revoow.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return Redirect(redirectUrl);
                     }
                 }
                 foreach (var error in result.Errors)

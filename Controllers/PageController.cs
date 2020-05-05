@@ -13,6 +13,8 @@ using Revoow.ViewModels.Revoow;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Revoow.Areas.Identity;
 
 namespace Revoow.Controllers
 {
@@ -21,16 +23,19 @@ namespace Revoow.Controllers
         private readonly IPageRepository pageRepository;
         private readonly ITestimonialRepository testimonialRepository;
         private readonly VideoService videoService;
+        private readonly UserManager<RevoowUser> userManager;
         private readonly IMapper mapper;
 
         public PageController(IPageRepository pageRepository, 
                               ITestimonialRepository testimonialRepository, 
                               VideoService videoService,
+                              UserManager<RevoowUser> userManager,
                               IMapper mapper)
         {
             this.pageRepository = pageRepository;
             this.testimonialRepository = testimonialRepository;
             this.videoService = videoService;
+            this.userManager = userManager;
             this.mapper = mapper;
         }
 
@@ -39,18 +44,21 @@ namespace Revoow.Controllers
             return View();
         }
 
-        public IActionResult Detail(string companyName)
+        public IActionResult Detail(string pageUrl)
         {
-            var page = this.pageRepository.GetByName(companyName);
-            if (page == null) return NotFound();
+            var page = this.pageRepository.GetByUrl(pageUrl);
+            if (page == null)
+            {
+                return NotFound();
+            }
             var viewModel = this.mapper.Map<Page, DetailViewModel>(page);
 
             return View(viewModel);
         }
 
-        public IActionResult Upload(string companyName)
+        public IActionResult Upload(string pageUrl)
         {
-            var page = this.pageRepository.GetByName(companyName);
+            var page = this.pageRepository.GetByUrl(pageUrl);
             if (page == null) return NotFound();
             var viewModel = this.mapper.Map<Page, UploadViewModel>(page);
             return View(viewModel);
@@ -59,6 +67,10 @@ namespace Revoow.Controllers
         [HttpPost("/page/upload")]
         public IActionResult Upload()
         {
+            string redirectUrl;
+
+            var user = userManager.GetUserAsync(HttpContext.User);
+            
             var file = Request.Form.Files[0];
             var ratingValue = Int32.Parse(Request.Form["ratingValue"]);
             var reviewerName = Request.Form["reviewerName"].ToString();
@@ -66,6 +78,14 @@ namespace Revoow.Controllers
             var companyName = Request.Form["companyName"];
 
             var page = pageRepository.GetById(pageId);
+
+
+            if (!(page.Testimonials == null) && (page.Testimonials.Count >= user.Result.MaxVideos))
+            {
+
+                redirectUrl = Request.Host + "/" + page.PageURL;
+                return Json(new { url = redirectUrl });
+            }
 
             videoService.SaveVideo(file);
             var thumbnail = videoService.GenerateThumbnail();
@@ -76,13 +96,15 @@ namespace Revoow.Controllers
                 VideoName = videoService.fileName,
                 VideoPath = videoService.videoPath,
                 VideoThumbnail = thumbnail,
-                ReviewerName = reviewerName
+                ReviewerName = reviewerName,               
             };
             testimonialRepository.Add(testimonial);
             page.Testimonials.Add(testimonial);
             pageRepository.Update(page);
 
-            return Redirect("/" + companyName);
+            redirectUrl = Request.Host + "/" + page.PageURL;
+
+            return Json(new {url = redirectUrl});
 
         }
 
