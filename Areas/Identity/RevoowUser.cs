@@ -8,7 +8,33 @@ namespace Revoow.Areas.Identity
 {
     public class RevoowUser : IdentityUser
     {
-        public int MaxVideos { get; set; }
+        private int maxVideos;
+        public int MaxVideos
+        {
+            get
+            {
+                switch (AccountType)
+                {
+                    case AccountType.Professional:
+                        this.maxVideos = 10000;
+                        break;
+                    case AccountType.Small:
+                        this.maxVideos = 10;
+                        break;
+                    case AccountType.Free:
+                        this.maxVideos = 5;
+                        break;
+                    default:
+                        this.maxVideos = 5;
+                        break;
+                }
+                return this.maxVideos;
+            }
+            set
+            {
+                maxVideos = 5;
+            }
+        }
         public AccountType AccountType { get; set; }
     }
 
