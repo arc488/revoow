@@ -13,5 +13,6 @@ namespace Revoow.ViewModels.Revoow
         public string RevoowURL { get; set; }
         public Testimonial[] Testimonials { get; set; }
         public int CompanyRating { get; set; }
+        public bool IsVideoLimitReached { get; set; }
     }
 }

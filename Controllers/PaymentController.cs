@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Stripe.Checkout;
 
 namespace Revoow.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly PaymentService paymentService;
@@ -45,12 +47,9 @@ namespace Revoow.Controllers
             var plan = session.DisplayItems.First().Plan;
             AccountType type = GetAccountTypeFromString(plan.Id);
 
-            Debug.WriteLine("User email: " + user.Email);
-
             user.AccountType = type;
             if (plan.Active)
             {
-                Debug.WriteLine("Before update async");
                 await userManager.UpdateAsync(user);
             }
 

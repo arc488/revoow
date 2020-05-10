@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -14,6 +15,7 @@ using Revoow.ViewModels.Revoow;
 
 namespace Revoow.Controllers
 {
+    [Authorize]
     public class CompanyController : Controller
     {
         private readonly IPageRepository pageRepository;

@@ -18,6 +18,7 @@ using Revoow.Areas.Identity;
 
 namespace Revoow.Controllers
 {
+    [Authorize]
     public class PageController : Controller
     {
         private readonly IPageRepository pageRepository;
@@ -26,8 +27,8 @@ namespace Revoow.Controllers
         private readonly UserManager<RevoowUser> userManager;
         private readonly IMapper mapper;
 
-        public PageController(IPageRepository pageRepository, 
-                              ITestimonialRepository testimonialRepository, 
+        public PageController(IPageRepository pageRepository,
+                              ITestimonialRepository testimonialRepository,
                               VideoService videoService,
                               UserManager<RevoowUser> userManager,
                               IMapper mapper)
@@ -52,7 +53,8 @@ namespace Revoow.Controllers
                 return NotFound();
             }
             var viewModel = this.mapper.Map<Page, DetailViewModel>(page);
-
+            Debug.WriteLine(page.CreatedBy.MaxVideos);
+            viewModel.IsVideoLimitReached = (int)page.Testimonials.Count >= (int)page.CreatedBy.MaxVideos;
             return View(viewModel);
         }
 
@@ -69,8 +71,8 @@ namespace Revoow.Controllers
         {
             string redirectUrl;
 
-            var user = userManager.GetUserAsync(HttpContext.User);
-            
+            var user = userManager.GetUserAsync(HttpContext.User).Result;
+
             var file = Request.Form.Files[0];
             var ratingValue = Int32.Parse(Request.Form["ratingValue"]);
             var reviewerName = Request.Form["reviewerName"].ToString();
@@ -80,31 +82,33 @@ namespace Revoow.Controllers
             var page = pageRepository.GetById(pageId);
 
 
-            if (!(page.Testimonials == null) && (page.Testimonials.Count >= user.Result.MaxVideos))
+            if (!(page.Testimonials == null) && (page.Testimonials.Count >= user.MaxVideos))
             {
 
                 redirectUrl = Request.Host + "/" + page.PageURL;
                 return Json(new { url = redirectUrl });
             }
 
-            videoService.SaveVideo(file);
-            var thumbnail = videoService.GenerateThumbnail();
-            var testimonial = new Testimonial()
+            if (page.Testimonials.Count >= user.MaxVideos)
             {
-                PageId = pageId,
-                Rating = ratingValue,
-                VideoName = videoService.fileName,
-                VideoPath = videoService.videoPath,
-                VideoThumbnail = thumbnail,
-                ReviewerName = reviewerName,               
-            };
-            testimonialRepository.Add(testimonial);
-            page.Testimonials.Add(testimonial);
-            pageRepository.Update(page);
-
+                videoService.SaveVideo(file);
+                var thumbnail = videoService.GenerateThumbnail();
+                var testimonial = new Testimonial()
+                {
+                    PageId = pageId,
+                    Rating = ratingValue,
+                    VideoName = videoService.fileName,
+                    VideoPath = videoService.videoPath,
+                    VideoThumbnail = thumbnail,
+                    ReviewerName = reviewerName,
+                };
+                testimonialRepository.Add(testimonial);
+                page.Testimonials.Add(testimonial);
+                pageRepository.Update(page);
+            }
             redirectUrl = Request.Host + "/" + page.PageURL;
 
-            return Json(new {url = redirectUrl});
+            return Json(new { url = redirectUrl });
 
         }
 

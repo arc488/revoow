@@ -19,6 +19,7 @@ namespace Revoow.Data.Repositories
         {
             var page = appDbContext.Pages
                         .Include(p => p.Testimonials)
+                        .Include(p => p.CreatedBy)
                         .FirstOrDefault(p => p.CompanyName == companyName);
             return page;
         }
@@ -27,6 +28,7 @@ namespace Revoow.Data.Repositories
         {
             var page = appDbContext.Pages
                         .Include(p => p.Testimonials)
+                        .Include(p => p.CreatedBy)
                         .FirstOrDefault(p => p.PageURL == pageUrl);
             return page;
         }

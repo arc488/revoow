@@ -1,41 +1,41 @@
 ﻿@model DetailViewModel
 
 @{
-	Layout = null;
+    Layout = null;
 }
 
 
 <html>
 
 <head>
-	<script src="~/lib/jquery/dist/jquery.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-	<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-	<link href="~/css/detail.css" rel="stylesheet" />
-	<script src="https://use.fontawesome.com/4ff92ff337.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/detail.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/4ff92ff337.js"></script>
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<a class="navbar-brand" href="#">@Model.CompanyName</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="ml-auto">
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#">Link</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="company-info justify-content-center">
-		<p id="company-name">@Model.CompanyName</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">@Model.CompanyName</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="ml-auto">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="company-info justify-content-center">
+        <p id="company-name">@Model.CompanyName</p>
         <div id="company-rating" class="justify-content-center">
             @for (int i = 0; i < Model.CompanyRating; i++)
             {
@@ -47,23 +47,26 @@
 
             }
         </div>
-		<div id="company-link">
-			<a href="www.google.com">Visit company website</a>
-		</div>
-	</div>
-	<div class="add-testimonial">
-		<a href="/@Model.CompanyName/Upload" class="btn btn-primary btn-lg">Add Testimonial</a>
-	</div>
-	<div class="videos">
-		<div class="row justify-content-center">
-			@foreach (var testimonial in Model.Testimonials)
-			{
-				<div class="card" style="width: 18rem;">
-					<div class="card-header">Review by @testimonial.ReviewerName</div>
+        <div id="company-link">
+            <a href="www.google.com">Visit company website</a>
+        </div>
+    </div>
+    <div class="add-testimonial">
+        @if (!Model.IsVideoLimitReached)
+        {
+            <a href="/@Model.CompanyName/Upload" class="btn btn-primary btn-lg">Add Testimonial</a>
+        }
+    </div>
+    <div class="videos">
+        <div class="row justify-content-center">
+            @foreach (var testimonial in Model.Testimonials)
+            {
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">Review by @testimonial.ReviewerName</div>
 
-					<img class="card-img-top" src="data:image;base64,@Convert.ToBase64String(testimonial.VideoThumbnail)" />
+                    <img class="card-img-top" src="data:image;base64,@Convert.ToBase64String(testimonial.VideoThumbnail)" />
 
-					<div class="card-body">
+                    <div class="card-body">
                         <h5 class="card-title video-rating">
                             @for (int i = 0; i < testimonial.Rating; i++)
                             {
@@ -75,12 +78,12 @@
 
                             }
                         </h5>
-					</div>
-				</div>
-			}
+                    </div>
+                </div>
+            }
 
-		</div>
-	</div>
+        </div>
+    </div>
 </body>
 
 </html>
