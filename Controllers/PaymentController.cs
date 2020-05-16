@@ -33,75 +33,45 @@ namespace Revoow.Controllers
 
         public IActionResult Pay(AccountType id)
         {
-            string planId = GetPlanIdFromAccountType(id);
-            Session session = paymentService.CreateSession(planId, Request);
-            ViewBag.sessionId = session.Id;
-            return View();
+            string planId = this.configuration["Stripe:PlanId"];
+            var type = id;
+            int quantity = (int)type;
+
+            if (type != AccountType.Starter)
+            {
+                Session session = paymentService.CreateSession(planId, Request, quantity);
+                ViewBag.sessionId = session.Id;
+                return View();
+            };
+            return RedirectToAction("Success");
         }
 
+ 
         public async Task<IActionResult> Success(string id)
         {
             var user = userManager.GetUserAsync(HttpContext.User).Result;
-            var session = this.paymentService.RetrieveSession(id);
-
-            var plan = session.DisplayItems.First().Plan;
-            AccountType type = GetAccountTypeFromString(plan.Id);
-
-            user.AccountType = type;
-            if (plan.Active)
+            if (!string.IsNullOrEmpty(id))
             {
-                await userManager.UpdateAsync(user);
-            }
+                var session = this.paymentService.RetrieveSession(id);
 
+                user.CustomerId = session.CustomerId;
+                user.SubscriptionId = session.SubscriptionId;
 
-            return View();
-        }
+                var subscription = this.paymentService.RetrieveSubscription(user.SubscriptionId);
 
+                AccountType type = (AccountType)subscription.Quantity;
 
-        #region Helpers
-        public AccountType GetAccountTypeFromString(string acconuntTypeString)
-        {
-            AccountType type;
-            if (acconuntTypeString == this.configuration["Stripe:PlanId:Small"])
-            {
-                type = AccountType.Small;
-            }
-            else if (acconuntTypeString == this.configuration["Stripe:PlanId:Professional"])
-            {
-                type = AccountType.Professional;
-            }
-            else if (acconuntTypeString == this.configuration["Stripe:PlanId:Free"])
-            {
-                type = AccountType.Free;
+                user.AccountType = type;
             }
             else
             {
-                type = AccountType.Free;
-            }
-            return type;
-        }
+                user.AccountType = AccountType.Starter;
+            };
 
-        public string GetPlanIdFromAccountType(AccountType type)
-        {
-            string planId;
-            switch (type)
-            {
-                case AccountType.Small:
-                    planId = this.configuration["Stripe:PlanId:Small"];
-                    break;
-                case AccountType.Professional:
-                    planId = this.configuration["Stripe:PlanId:Professional"];
-                    break;
-                case AccountType.Free:
-                    planId = this.configuration["Stripe:PlanId:Free"];
-                    break;
-                default:
-                    planId = "free";
-                    break;
-            }
-            return planId;
-        } 
-        #endregion
+            await userManager.UpdateAsync(user);
+            
+            return View();
+        }
 
     }
 }

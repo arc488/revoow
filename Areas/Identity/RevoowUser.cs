@@ -21,7 +21,7 @@ namespace Revoow.Areas.Identity
                     case AccountType.Small:
                         this.maxVideos = 10;
                         break;
-                    case AccountType.Free:
+                    case AccountType.Starter:
                         this.maxVideos = 5;
                         break;
                     default:
@@ -36,11 +36,14 @@ namespace Revoow.Areas.Identity
             }
         }
         public AccountType AccountType { get; set; }
+        public string SubscriptionId { get; set; }
+        public string CustomerId { get; set; }
+
     }
 
     public enum AccountType
     {
-        Free,
+        Starter,
         Small,
         Professional
     };

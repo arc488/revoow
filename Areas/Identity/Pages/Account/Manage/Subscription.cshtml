@@ -1,0 +1,63 @@
+﻿@page
+@model SubscriptionModel
+@{
+
+    ViewData["Title"] = "Subscription";
+    ViewData["ActivePage"] = ManageNavPages.Subscription;
+}
+
+    <div class="container">
+        <h4>@ViewData["Title"]</h4>
+
+        <div class="information">
+            <p class="currentplan bg-light">
+                You are currently subscribed to the @Model.AccountType.ToString() plan.
+            </p>
+            @if (Model.AccountType != AccountType.Starter)
+            {
+                <p class="expiration">
+                    Your subscription will renew on @Model.Expiration.
+                </p>
+            }
+        </div>
+        <hr>
+
+        <div class="upgrade">
+            <h4>Upgrade Plan</h4>
+            <partial name="_ChoosePlanPartial" />
+
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Input.CurrentType"></label>
+                    <input readonly asp-for="Input.CurrentType" class="form-control" />
+                    <span asp-validation-for="Input.CurrentType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <select hidden asp-for="Input.AccountType" asp-items="Html.GetEnumSelectList<AccountType>()">
+                        <option selected="selected" value="">Please select</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Upgrade</button>
+            </form>
+        </div>
+
+        <hr>
+        <div class="cancel">
+            <h4>Cancel Subscription</h4>
+            <br>
+            <form>
+                <div class="form-group col-md-4">
+                    <label asp-for="Input.Password">Password</label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="submit" class="btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

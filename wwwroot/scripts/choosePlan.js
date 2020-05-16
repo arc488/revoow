@@ -10,3 +10,10 @@ var $cols = $('.card-pricing').click(function (e) {
     $accountTypeInput.val(plan).change();
 
 });
+
+if ($("#Input_CurrentType").length){
+    var currentPlan = $("#Input_CurrentType").val();
+  $cols.filter(function( index ) {
+    return $( this ).find( "#PlanValue" ).val() == currentPlan;
+  }).remove();
+};
