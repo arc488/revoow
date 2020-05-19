@@ -32,7 +32,12 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
 
         public string Expiration { get; set; }
 
-        public AccountType AccountType { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
+
+        public bool IsCanceled { get; set; }
+
+        public int CurrentType { get; set; }
+
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -45,18 +50,19 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            public AccountType AccountType { get; set; }
+            public SubscriptionType SubscriptionType { get; set; }
 
-            public int CurrentType { get; set; }
         }
 
         private async Task LoadAsync(RevoowUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             Username = userName;
-            AccountType = user.AccountType;
+            SubscriptionType = user.SubscriptionType;
+            CurrentType = (int)user.SubscriptionType;
+            IsCanceled = _paymentService.RetrieveSubscription(user.SubscriptionId).CanceledAt != null;
 
-            if (user.AccountType != AccountType.Starter)
+            if (user.SubscriptionType != SubscriptionType.Starter)
             {
                 var subscription = _paymentService.RetrieveSubscription(user.SubscriptionId);
                 Expiration = subscription.CurrentPeriodEnd.Value.ToShortDateString();
@@ -68,7 +74,6 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                CurrentType = (int)user.AccountType
             };
         }
 
@@ -100,23 +105,34 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            if (user.AccountType != Input.AccountType)
+            if (user.SubscriptionType != Input.SubscriptionType)
             {
-                var newAccountType = Input.AccountType;
-                if (newAccountType != AccountType.Starter && newAccountType != user.AccountType)
+                var newSubscriptionType = Input.SubscriptionType;
+                var isCanceled = _paymentService.RetrieveSubscription(user.SubscriptionId).CanceledAt != null;
+
+                if (newSubscriptionType != SubscriptionType.Starter && newSubscriptionType != user.SubscriptionType && isCanceled == false)
                 {
-                    var subscription = _paymentService.UpdateSubscription(user.Id, newAccountType);
-                    var newType = (AccountType)subscription.Quantity;
-                    user.AccountType = newType;
+                    var subscription = _paymentService.UpdateSubscription(user.Id, newSubscriptionType);
+                    var newType = (SubscriptionType)subscription.Quantity;
+                    user.SubscriptionType = newType;
 
                 }
-                else if (newAccountType == AccountType.Starter)
+                else if (newSubscriptionType == SubscriptionType.Starter)
                 {
-                    var subscription = _paymentService.CancelSubscription(user.SubscriptionId);         
+                    var subscription = _paymentService.CancelSubscription(user.SubscriptionId);
                 }
-                else if (user.AccountType == AccountType.Starter && String.IsNullOrEmpty(user.SubscriptionId))
+                else if (user.SubscriptionType == SubscriptionType.Starter && String.IsNullOrEmpty(user.SubscriptionId))
                 {
-                    redirectUrl = "~/Payment/Pay/" + newAccountType;
+                    redirectUrl = "~/Payment/Pay/" + newSubscriptionType;
+                }
+                else if (isCanceled && String.IsNullOrEmpty(user.SubscriptionId) == false)
+                {
+                    redirectUrl = "~/Payment/Pay/" + newSubscriptionType;
+                }
+                else
+                {
+                    await LoadAsync(user);
+                    return Page();
                 }
             }
 

@@ -8,17 +8,27 @@
 
     <div class="container">
         <h4>@ViewData["Title"]</h4>
+        <input id="currentPlanValue" value="@Model.CurrentType" />
+        <input id="isCanceled" value="@Model.IsCanceled.ToString()" />
 
         <div class="information">
-            <p class="currentplan bg-light">
-                You are currently subscribed to the @Model.AccountType.ToString() plan.
+            <p class="currentplan">
+                You are currently subscribed to the @Model.SubscriptionType.ToString() plan.
             </p>
-            @if (Model.AccountType != AccountType.Starter)
+            @if (Model.SubscriptionType != SubscriptionType.Starter)
             {
                 <p class="expiration">
                     Your subscription will renew on @Model.Expiration.
                 </p>
             }
+
+            @if (Model.IsCanceled)
+            {
+                <p class="cancelInfo">
+                    Your subscription has been cancelled or downgraded to Start plan and will expire on @Model.Expiration.
+                </p>
+            }
+
         </div>
         <hr>
 
@@ -28,12 +38,7 @@
 
             <form method="post">
                 <div class="form-group">
-                    <label asp-for="Input.CurrentType"></label>
-                    <input readonly asp-for="Input.CurrentType" class="form-control" />
-                    <span asp-validation-for="Input.CurrentType" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <select hidden asp-for="Input.AccountType" asp-items="Html.GetEnumSelectList<AccountType>()">
+                    <select hidden asp-for="Input.SubscriptionType" asp-items="Html.GetEnumSelectList<SubscriptionType>()">
                         <option selected="selected" value="">Please select</option>
                     </select>
                 </div>

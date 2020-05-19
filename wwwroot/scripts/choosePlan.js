@@ -1,4 +1,4 @@
-﻿var $accountTypeInput = $('#Input_AccountType');
+﻿var $SubscriptionTypeInput = $('#Input_SubscriptionType');
 
 var addclass = 'shadow';
 var $cols = $('.card-pricing').click(function (e) {
@@ -7,13 +7,22 @@ var $cols = $('.card-pricing').click(function (e) {
     $(this).addClass(addclass);
     $('button').removeClass("btn-primary").addClass('btn-outline-secondary');
     $(this).find('button').addClass("btn-primary").removeClass('btn-outline-secondary');
-    $accountTypeInput.val(plan).change();
+    $SubscriptionTypeInput.val(plan).change();
 
 });
 
-if ($("#Input_CurrentType").length){
-    var currentPlan = $("#Input_CurrentType").val();
+if ($("#currentPlanValue").length && $("#isCanceled").val() !== "True"){
+    var currentPlan = $("#currentPlanValue").val();
   $cols.filter(function( index ) {
-    return $( this ).find( "#PlanValue" ).val() == currentPlan;
+    return $( this ).find( "#PlanValue" ).val() === currentPlan;
   }).remove();
 };
+
+if ($("#isCanceled").val() === "True") {
+    $cols
+        .filter(function (index) {
+            return $(this).find("#PlanValue").val() === "0";
+        })
+        .remove();
+}
+

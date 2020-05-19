@@ -31,15 +31,14 @@ namespace Revoow.Controllers
             this.configuration = configuration;
         }
 
-        public IActionResult Pay(AccountType id)
+        public IActionResult Pay(SubscriptionType id)
         {
-            string planId = this.configuration["Stripe:PlanId"];
             var type = id;
-            int quantity = (int)type;
+            var hostHeader = Request.Host.ToString();
 
-            if (type != AccountType.Starter)
+            if (type != SubscriptionType.Starter)
             {
-                Session session = paymentService.CreateSession(planId, Request, quantity);
+                Session session = paymentService.CreateSession(type, hostHeader);
                 ViewBag.sessionId = session.Id;
                 return View();
             };
@@ -59,13 +58,13 @@ namespace Revoow.Controllers
 
                 var subscription = this.paymentService.RetrieveSubscription(user.SubscriptionId);
 
-                AccountType type = (AccountType)subscription.Quantity;
+                SubscriptionType type = (SubscriptionType)subscription.Quantity;
 
-                user.AccountType = type;
+                user.SubscriptionType = type;
             }
             else
             {
-                user.AccountType = AccountType.Starter;
+                user.SubscriptionType = SubscriptionType.Starter;
             };
 
             await userManager.UpdateAsync(user);

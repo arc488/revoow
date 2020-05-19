@@ -36,9 +36,9 @@ namespace Revoow.Areas.Identity
                 services.AddAuthorization(options =>
                 {
                     options.AddPolicy("IsRevoowUser", policy => policy.RequireRole("RevoowUser"));
-                    options.AddPolicy("IsStarter", policy => policy.RequireClaim("AccountType", AccountType.Starter.ToString()));
-                    options.AddPolicy("IsSmall", policy => policy.RequireClaim("AccountType", AccountType.Small.ToString()));
-                    options.AddPolicy("IsProfessional", policy => policy.RequireClaim("AccountType", AccountType.Professional.ToString()));
+                    options.AddPolicy("IsStarter", policy => policy.RequireClaim("SubscriptionType", SubscriptionType.Starter.ToString()));
+                    options.AddPolicy("IsSmall", policy => policy.RequireClaim("SubscriptionType", SubscriptionType.Small.ToString()));
+                    options.AddPolicy("IsProfessional", policy => policy.RequireClaim("SubscriptionType", SubscriptionType.Professional.ToString()));
                 });
             });
 

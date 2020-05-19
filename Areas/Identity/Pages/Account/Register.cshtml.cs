@@ -63,7 +63,7 @@ namespace Revoow.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            public AccountType AccountType { get; set; }
+            public SubscriptionType SubscriptionType { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +75,7 @@ namespace Revoow.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            var redirectUrl = "/Payment/Pay/" + Input.AccountType;
+            var redirectUrl = "/Payment/Pay/" + Input.SubscriptionType;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {

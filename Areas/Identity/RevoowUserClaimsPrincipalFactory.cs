@@ -22,7 +22,7 @@ namespace Revoow.Areas.Identity
         {
             var identity = await base.GenerateClaimsAsync(user);
 
-            identity.AddClaim(new Claim("AccountType", user.AccountType.ToString()));
+            identity.AddClaim(new Claim("SubscriptionType", user.SubscriptionType.ToString()));
             identity.AddClaim(new Claim("MaxVideos", user.MaxVideos.ToString()));
 
             return identity;

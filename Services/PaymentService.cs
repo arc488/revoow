@@ -17,6 +17,8 @@ namespace Revoow.Services
     {
         private readonly IConfiguration configuration;
         private readonly UserManager<RevoowUser> userManager;
+        private readonly string smallPlanId;
+        private readonly string professionalPlanId;
 
         public PaymentService(IConfiguration configuration,
                               UserManager<RevoowUser> userManager)
@@ -24,9 +26,11 @@ namespace Revoow.Services
             this.configuration = configuration;
             this.userManager = userManager;
             StripeConfiguration.ApiKey = this.configuration["Stripe:SecretKey"];
+            this.smallPlanId = this.configuration["Stripe:Plans:Small"];
+            this.professionalPlanId = this.configuration["Stripe:Plans:Professional"];
         }
 
-        public Session CreateSession(string planId, HttpRequest request, int quantity)
+        public Session CreateSession(SubscriptionType type, string hostHeader)
         {
             // Set your secret key. Remember to switch to your live secret key in production!
             // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -39,14 +43,13 @@ namespace Revoow.Services
                 SubscriptionData = new SessionSubscriptionDataOptions
                 {
                     Items = new List<SessionSubscriptionDataItemOptions> {
-                        new SessionSubscriptionDataItemOptions {
-                            Plan = planId,
-                            Quantity = quantity
+                        new SessionSubscriptionDataItemOptions {                      
+                            Plan = GetPlanIdFromSubscriptionType(type),                         
                         },
                     },
                 },
-                SuccessUrl = "https://" + request.Host + "/Payment/Success/{CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://" + request.Host + "/cancel",
+                SuccessUrl = "https://" + hostHeader + "/Payment/Success/{CHECKOUT_SESSION_ID}",
+                CancelUrl = "https://" + hostHeader + "/cancel",
 
             };
 
@@ -56,17 +59,32 @@ namespace Revoow.Services
             return session;
         }
 
-        public Subscription UpdateSubscription(string userId, Areas.Identity.AccountType type)
+        public Subscription ChangePlan(string userId, SubscriptionType type)
         {
-            Debug.WriteLine("Inside UpdateSubscription");
             var user = this.userManager.FindByIdAsync(userId).Result;
-            var currentType = user.AccountType;
+
+            bool isUpgrade = (int)type > (int)user.SubscriptionType;
+
+            return new Subscription();
+        }
+ 
+        public Subscription UpdateSubscription(string userId, SubscriptionType type)
+        {
+            var user = this.userManager.FindByIdAsync(userId).Result;
+            var currentType = user.SubscriptionType;
             var subscriptionId = user.SubscriptionId;
 
             bool isUpgrade = (int)type > (int)currentType;
 
             var service = new SubscriptionService();
             Subscription subscription = service.Get(subscriptionId);
+
+            var items = new List<SubscriptionItemOptions> {
+                new SubscriptionItemOptions {               
+                    Id = subscription.Items.Data[0].Id,
+                    Plan = GetPlanIdFromSubscriptionType(type),
+                },
+            };
 
             string behavior; 
             if (isUpgrade)
@@ -81,8 +99,8 @@ namespace Revoow.Services
             var options = new SubscriptionUpdateOptions
             {
                 CancelAtPeriodEnd = false,
-                ProrationBehavior = behavior,
-                Quantity = (int)type,
+                ProrationBehavior = behavior,           
+                Items = items
             };
 
             subscription = service.Update(subscriptionId, options);
@@ -95,6 +113,29 @@ namespace Revoow.Services
             var service = new SessionService();
             var session = service.Get(sessionId);
             return session;
+        }
+
+        public Subscription PauseSubscription(string subscriptionId)
+        {
+            var options = new SubscriptionUpdateOptions
+            {
+                PauseCollection = new SubscriptionPauseCollectionOptions
+                {
+                    Behavior = "mark_uncollectible",                 
+                },
+            };
+            var service = new SubscriptionService();
+            var subscription = service.Update(subscriptionId, options);
+            return subscription;
+        }
+
+        public Subscription UnpauseSubscription(string subscriptionId)
+        {
+            var options = new SubscriptionUpdateOptions();
+            options.AddExtraParam("pause_collection", "");
+            var service = new SubscriptionService();
+            var subscription = service.Update(subscriptionId, options);
+            return subscription;
         }
         
         public Subscription CancelSubscription(string subscriptionId)
@@ -118,6 +159,25 @@ namespace Revoow.Services
             var subscription = service.Get(subscriptionId);
             return subscription;
         }
+
+        public string GetPlanIdFromSubscriptionType(SubscriptionType type)
+        {
+            string planId = "";
+
+            switch ((int)type)
+            {
+                case 1:
+                    planId = this.configuration["Stripe:Plans:Small"];
+                    break;
+                case 2:
+                    planId = this.configuration["Stripe:Plans:Professional"];
+                    break;
+            }
+
+            return planId;
+
+        }
+
     }
 
 }

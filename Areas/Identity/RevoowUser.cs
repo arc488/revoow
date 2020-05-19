@@ -13,15 +13,15 @@ namespace Revoow.Areas.Identity
         {
             get
             {
-                switch (AccountType)
+                switch (SubscriptionType)
                 {
-                    case AccountType.Professional:
+                    case SubscriptionType.Professional:
                         this.maxVideos = 10000;
                         break;
-                    case AccountType.Small:
+                    case SubscriptionType.Small:
                         this.maxVideos = 10;
                         break;
-                    case AccountType.Starter:
+                    case SubscriptionType.Starter:
                         this.maxVideos = 5;
                         break;
                     default:
@@ -35,13 +35,13 @@ namespace Revoow.Areas.Identity
                 maxVideos = 5;
             }
         }
-        public AccountType AccountType { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
         public string SubscriptionId { get; set; }
         public string CustomerId { get; set; }
 
     }
 
-    public enum AccountType
+    public enum SubscriptionType
     {
         Starter,
         Small,
