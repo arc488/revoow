@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Revoow.Areas.Identity;
+using Stripe;
+using Revoow.Options;
+using System.Diagnostics;
 
 namespace Revoow
 {
@@ -39,7 +42,7 @@ namespace Revoow
         {
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
+            //services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
             services.AddRazorPages();
 
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -52,7 +55,8 @@ namespace Revoow
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
 
-
+            services.AddOptions();
+            services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -85,6 +89,9 @@ namespace Revoow
                     defaults: new { controller = "Page" });
                 endpoints.MapRazorPages();
             });
+
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["ApiKey"];
+
         }
     }
 }

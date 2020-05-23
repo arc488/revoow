@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Revoow.Areas.Identity;
+using Revoow.Options;
 using Stripe;
 using Stripe.Checkout;
 using System;
@@ -21,13 +23,13 @@ namespace Revoow.Services
         private readonly string professionalPlanId;
 
         public PaymentService(IConfiguration configuration,
-                              UserManager<RevoowUser> userManager)
+                              UserManager<RevoowUser> userManager,
+                              IOptions<StripeOptions> stripeOptions)
         {
             this.configuration = configuration;
             this.userManager = userManager;
-            StripeConfiguration.ApiKey = this.configuration["Stripe:SecretKey"];
-            this.smallPlanId = this.configuration["Stripe:Plans:Small"];
-            this.professionalPlanId = this.configuration["Stripe:Plans:Professional"];
+            this.smallPlanId = stripeOptions.Value.Plans.SmallBusinessPlanId;
+            this.professionalPlanId = stripeOptions.Value.Plans.ProfessionalPlanId;
         }
 
         public Session CreateSession(SubscriptionType type, string hostHeader)
@@ -43,8 +45,9 @@ namespace Revoow.Services
                 SubscriptionData = new SessionSubscriptionDataOptions
                 {
                     Items = new List<SessionSubscriptionDataItemOptions> {
-                        new SessionSubscriptionDataItemOptions {                      
-                            Plan = GetPlanIdFromSubscriptionType(type),                         
+                        new SessionSubscriptionDataItemOptions {
+                            Plan = GetPlanIdFromSubscriptionType(type),
+                            Quantity = 1,
                         },
                     },
                 },
@@ -164,15 +167,17 @@ namespace Revoow.Services
         {
             string planId = "";
 
-            switch ((int)type)
+            switch (type)
             {
-                case 1:
-                    planId = this.configuration["Stripe:Plans:Small"];
+                case SubscriptionType.Small:
+                    planId = smallPlanId;
                     break;
-                case 2:
-                    planId = this.configuration["Stripe:Plans:Professional"];
+                case SubscriptionType.Professional:
+                    planId = professionalPlanId;
                     break;
             }
+
+            Debug.WriteLine("Plan id is " + planId);
 
             return planId;
 

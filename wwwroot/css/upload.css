@@ -1,5 +1,7 @@
 ﻿html {
     font: 15px Verdana;
+    margin-right: 20%;
+    margin-left: 20%;
 }
 
 .container {
@@ -32,15 +34,16 @@
     text-align: center;
     font-style: normal;
     font-size: 60px;
-    font-weigth: 1000;
-    color: black;
+    font-weight: 500;
     display: inline-block;
     height: 80px;
     width: 80px;
     border-radius: 50%;
-    background: white;
+    background-color: #0ac547;
     margin-top: 15px;
     margin-bottom: 15px;
+    border: 2px solid white;
+    color: white;
 }
 
 .video .row {
