@@ -53,7 +53,6 @@ namespace Revoow.Controllers
                 return NotFound();
             }
             var viewModel = this.mapper.Map<Page, DetailViewModel>(page);
-            Debug.WriteLine(page.CreatedBy.MaxVideos);
             viewModel.IsVideoLimitReached = (int)page.Testimonials.Count >= (int)page.CreatedBy.MaxVideos;
             return View(viewModel);
         }
@@ -81,15 +80,20 @@ namespace Revoow.Controllers
 
             var page = pageRepository.GetById(pageId);
 
+            var testimonialCount = 0;
+
+            if (page.Testimonials != null)
+            {
+                testimonialCount = page.Testimonials.Count;
+            }
 
             if (!(page.Testimonials == null) && (page.Testimonials.Count >= user.MaxVideos))
             {
-
-                redirectUrl = Request.Host + "/" + page.PageURL;
+                redirectUrl = Request.Scheme + "://" + Request.Host + "/" + page.PageURL; ;
                 return Json(new { url = redirectUrl });
             }
 
-            if (page.Testimonials.Count >= user.MaxVideos)
+            if (testimonialCount <= user.MaxVideos)
             {
                 videoService.SaveVideo(file);
                 var thumbnail = videoService.GenerateThumbnail();
@@ -97,7 +101,7 @@ namespace Revoow.Controllers
                 {
                     PageId = pageId,
                     Rating = ratingValue,
-                    VideoName = videoService.fileName,
+                    VideoName = videoService.fileName + ".webm",
                     VideoPath = videoService.videoPath,
                     VideoThumbnail = thumbnail,
                     ReviewerName = reviewerName,
@@ -106,7 +110,7 @@ namespace Revoow.Controllers
                 page.Testimonials.Add(testimonial);
                 pageRepository.Update(page);
             }
-            redirectUrl = Request.Host + "/" + page.PageURL;
+            redirectUrl = redirectUrl = Request.Scheme + "://" + Request.Host + "/" + page.PageURL;
 
             return Json(new { url = redirectUrl });
 

@@ -25,6 +25,7 @@ using Revoow.Areas.Identity;
 using Stripe;
 using Revoow.Options;
 using System.Diagnostics;
+using Revoow.Controllers;
 
 namespace Revoow
 {
@@ -52,6 +53,7 @@ namespace Revoow
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddTransient<VideoService>();
             services.AddTransient<PaymentService>();
+            services.AddTransient<StripeEventHandler>();
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
 

@@ -8,13 +8,13 @@ const startRecordingClassName = "fa fa-circle fa-lg";
 const stopRecordingClassName = "fa fa-stop fa-lg";
 
 const errorMsgElement = document.querySelector("span#errorMsg");
-const recordedVideo = document.querySelector("video#recorded");
 const recordButton = document.querySelector("button#record");
 const uploadButton = document.querySelector("button#upload");
 const reviewerNameInput = document.querySelector("input#reviewerName");
 const pageIdInput = document.querySelector("input#pageId");
 const companyNameInput = document.querySelector("input#companyName");
-
+const gumVideo = document.querySelector("video#gum");
+const blobLengthInput = document.querySelector("#blobLength");
 
 recordButton.addEventListener("click", () => {
     var icon = recordButton.children[0];
@@ -31,30 +31,36 @@ recordButton.addEventListener("click", () => {
 const playButton = document.querySelector("button#play");
 playButton.addEventListener("click", () => {
     const superBuffer = new Blob(recordedBlobs, { type: "video/webm" });
-    recordedVideo.src = null;
-    recordedVideo.srcObject = null;
-    recordedVideo.src = window.URL.createObjectURL(superBuffer);
-    recordedVideo.controls = true;
-    recordedVideo.play();
+    recordButton.disabled = true;
+    gumVideo.src = null;
+    gumVideo.srcObject = null;
+    gumVideo.src = window.URL.createObjectURL(superBuffer);
+    gumVideo.controls = true;
+    gumVideo.play();
 });
 
 uploadButton.addEventListener("click", () => {
-    
-    disableCamera();
-    var blob = new Blob(recordedBlobs, { type: "video/webm" });
-    var formData = new FormData();
 
-    formData.append("video-blob", blob);
-    formData.append("ratingValue", ratingValue);
-    formData.append("reviewerName", reviewerNameInput.value);
-    formData.append("pageId", pageIdInput.value); 
-    formData.append("companyName", companyNameInput.value); 
+    if ($("form[name='upload']").valid()) {
+        console.log("Form upload is valid");
+        uploadButton.disabled = true;
+        disableCamera();
+        var blob = new Blob(recordedBlobs, { type: "video/webm" });
+        var formData = new FormData();
 
-    var request = new XMLHttpRequest();
-    request.open("POST", "/Page/Upload");
-    request.send(formData);
-    handleRequestSent(request);
+        formData.append("video-blob", blob);
+        formData.append("ratingValue", ratingValue);
+        formData.append("reviewerName", reviewerNameInput.value);
+        formData.append("pageId", pageIdInput.value);
+        formData.append("companyName", companyNameInput.value);
 
+        var request = new XMLHttpRequest();
+        request.open("POST", "/Page/Upload");
+        request.send(formData);
+        handleRequestSent(request);
+    } else {
+        console.log("Form upload is not valid");
+    }
 
 });
 function disableCamera() {
@@ -85,6 +91,7 @@ function handleSourceOpen(event) {
 
 function handleDataAvailable(event) {
     console.log("handleDataAvailable", event);
+    blobLengthInput.value = recordedBlobs.length;
     if (event.data && event.data.size > 0) {
         recordedBlobs.push(event.data);
     }
@@ -138,10 +145,9 @@ function stopRecording() {
 
 function handleSuccess(stream) {
     recordButton.disabled = false;
+    gumVideo.controls = false;
     console.log("getUserMedia() got stream:", stream);
     window.stream = stream;
-
-    const gumVideo = document.querySelector("video#gum");
     gumVideo.srcObject = stream;
 }
 

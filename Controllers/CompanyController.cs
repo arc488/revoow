@@ -49,6 +49,7 @@ namespace Revoow.Controllers
                 file.CopyTo(ms);
                 page.Logo = ms.ToArray();
             };
+            
 
             this.pageRepository.Add(page);
             return Redirect("~/" + page.PageURL);

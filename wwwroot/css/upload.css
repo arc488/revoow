@@ -1,20 +1,15 @@
 ﻿html {
     font: 15px Verdana;
-    margin-right: 20%;
-    margin-left: 20%;
+
 }
 
-.container {
-    content: flex;
-}
 
 .company {
     text-align:center;
 }
 
 .company img {
-    max-height: 200px;
-    width: auto;
+    max-height: 150px;
 }
 
 .instructions .row {
@@ -44,6 +39,7 @@
     margin-bottom: 15px;
     border: 2px solid white;
     color: white;
+    line-height: 70px;
 }
 
 .video .row {
@@ -54,10 +50,20 @@
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
-
-    .video .row label {
-        font-size: 1.5em;
+    .video .row .directions {
+        font-size: 1.1em;
     }
+
+.errorTxt {
+    width: 100%;
+    font-size: 0.8em;
+    color: #D8000C;
+    background-color: #FFD2D2;
+    margin: 10px 0px;
+    padding: 8px;
+    border-radius: 0.5em;
+}
+
 
 video {
     width: 100%;

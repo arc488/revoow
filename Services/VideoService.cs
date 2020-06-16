@@ -13,7 +13,8 @@ namespace Revoow.Services
 {
     public class VideoService
     {
-        private string location = Environment.GetEnvironmentVariable("TEMP");
+        //private string location = Environment.GetEnvironmentVariable("TEMP");
+        private string location = @"wwwroot/videos";
         public string fileName;
         public string thumbnailPath;
         public string videoPath;

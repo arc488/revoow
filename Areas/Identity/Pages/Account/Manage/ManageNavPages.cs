@@ -20,11 +20,15 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
 
         public static string PersonalData => "PersonalData";
 
+        public static string UserPages => "UserPages";
+
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string SubscriptionNavClass(ViewContext viewContext) => PageNavClass(viewContext, Subscription);
+
+        public static string UserPagesNavClass(ViewContext viewContext) => PageNavClass(viewContext, UserPages);
 
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 

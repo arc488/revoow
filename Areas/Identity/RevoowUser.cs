@@ -39,12 +39,12 @@ namespace Revoow.Areas.Identity
         public string SubscriptionId { get; set; }
         public string CustomerId { get; set; }
 
+        public bool IsSubscribed()
+        {
+            return !String.IsNullOrEmpty(SubscriptionId);
+        }
+
     }
 
-    public enum SubscriptionType
-    {
-        Starter,
-        Small,
-        Professional
-    };
+
 }

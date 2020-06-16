@@ -15,6 +15,8 @@ namespace Revoow.Config
             CreateMap<Page, CreateViewModel>().ReverseMap();
             CreateMap<Page, DetailViewModel>().ReverseMap();
             CreateMap<Page, UploadViewModel>().ReverseMap();
+            CreateMap<Object, Stripe.Subscription>().ReverseMap();
+            CreateMap<Object, Stripe.Invoice>().ReverseMap();
         }
 
     }

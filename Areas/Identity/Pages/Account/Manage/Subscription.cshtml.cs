@@ -45,11 +45,14 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        [BindProperty]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
         public class InputModel
         {
-            [Display(Name = "Password")]
-            public string Password { get; set; }
 
+            [Range(minimum: 1, maximum: 2)]
             public SubscriptionType SubscriptionType { get; set; }
 
         }
@@ -60,16 +63,24 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
             Username = userName;
             SubscriptionType = user.SubscriptionType;
             CurrentType = (int)user.SubscriptionType;
-            IsCanceled = _paymentService.RetrieveSubscription(user.SubscriptionId).CanceledAt != null;
 
-            if (user.SubscriptionType != SubscriptionType.Starter)
+            if (user.IsSubscribed())
             {
-                var subscription = _paymentService.RetrieveSubscription(user.SubscriptionId);
-                Expiration = subscription.CurrentPeriodEnd.Value.ToShortDateString();
-            }
+                IsCanceled = _paymentService.RetrieveSubscription(user.SubscriptionId).CancelAtPeriodEnd == true;
+                if (user.SubscriptionType != SubscriptionType.Starter)
+                {
+                    var subscription = _paymentService.RetrieveSubscription(user.SubscriptionId);
+                    Expiration = subscription.CurrentPeriodEnd.Value.ToShortDateString();
+                }
+                else
+                {
+                    Expiration = DateTime.MaxValue.ToShortDateString();
+                }
+
+            } 
             else
             {
-                Expiration = DateTime.MaxValue.ToShortDateString();
+                IsCanceled = false;
             }
 
             Input = new InputModel
@@ -83,6 +94,31 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            await LoadAsync(user);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostCancelSubscriptionAsync()
+        {
+            Debug.WriteLine("CancelSubscription called");
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, Password, false);
+            if (result == Microsoft.AspNetCore.Identity.SignInResult.Success)
+            {
+                _paymentService.CancelSubscription(user.SubscriptionId);
+                StatusMessage = "Your subscription has been canceled";
+            }
+            else
+            {
+                StatusMessage = "Provided password is incorrect, please try again.";
             }
 
             await LoadAsync(user);
@@ -105,35 +141,32 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+
+
+            //If the new subscription isn't the same as old 
             if (user.SubscriptionType != Input.SubscriptionType)
             {
                 var newSubscriptionType = Input.SubscriptionType;
-                var isCanceled = _paymentService.RetrieveSubscription(user.SubscriptionId).CanceledAt != null;
+                var isUpgrade = (int)newSubscriptionType > (int)user.SubscriptionType;
 
-                if (newSubscriptionType != SubscriptionType.Starter && newSubscriptionType != user.SubscriptionType && isCanceled == false)
+                if (user.IsSubscribed())
                 {
-                    var subscription = _paymentService.UpdateSubscription(user.Id, newSubscriptionType);
-                    var newType = (SubscriptionType)subscription.Quantity;
-                    user.SubscriptionType = newType;
+                    if (isUpgrade)
+                    {
+                        _paymentService.UpgradeSubscription(user, newSubscriptionType);
+                    }
+                    else if (!isUpgrade)
+                    {
+                        _paymentService.DowngradeSubscription(user, newSubscriptionType);
+                    }
+                }
 
-                }
-                else if (newSubscriptionType == SubscriptionType.Starter)
-                {
-                    var subscription = _paymentService.CancelSubscription(user.SubscriptionId);
-                }
-                else if (user.SubscriptionType == SubscriptionType.Starter && String.IsNullOrEmpty(user.SubscriptionId))
+
+                if  (user.IsSubscribed() == false)
                 {
                     redirectUrl = "~/Payment/Pay/" + newSubscriptionType;
                 }
-                else if (isCanceled && String.IsNullOrEmpty(user.SubscriptionId) == false)
-                {
-                    redirectUrl = "~/Payment/Pay/" + newSubscriptionType;
-                }
-                else
-                {
-                    await LoadAsync(user);
-                    return Page();
-                }
+
             }
 
             await _userManager.UpdateAsync(user);

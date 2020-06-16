@@ -17,25 +17,23 @@ namespace Revoow.Services
 {
     public class PaymentService
     {
-        private readonly IConfiguration configuration;
-        private readonly UserManager<RevoowUser> userManager;
-        private readonly string smallPlanId;
-        private readonly string professionalPlanId;
+        private readonly IConfiguration _configuration;
+        private readonly string _smallBusinessPlanId;
+        private readonly string _professionalPlanId;
 
         public PaymentService(IConfiguration configuration,
-                              UserManager<RevoowUser> userManager,
                               IOptions<StripeOptions> stripeOptions)
         {
-            this.configuration = configuration;
-            this.userManager = userManager;
-            this.smallPlanId = stripeOptions.Value.Plans.SmallBusinessPlanId;
-            this.professionalPlanId = stripeOptions.Value.Plans.ProfessionalPlanId;
+            _configuration = configuration;
+            _smallBusinessPlanId = stripeOptions.Value.Plans.SmallBusinessPlanId;
+            _professionalPlanId = stripeOptions.Value.Plans.ProfessionalPlanId;
         }
 
-        public Session CreateSession(SubscriptionType type, string hostHeader)
+        public Session CreateSession(SubscriptionType type, string hostHeader, RevoowUser user)
         {
             // Set your secret key. Remember to switch to your live secret key in production!
             // See your keys here: https://dashboard.stripe.com/account/apikeys
+
             var options = new SessionCreateOptions
             {
 
@@ -44,15 +42,24 @@ namespace Revoow.Services
                 },
                 SubscriptionData = new SessionSubscriptionDataOptions
                 {
+                    Metadata = new Dictionary<string, string>
+                    {
+                        { "UserEmail", user.Email },
+                        { "PendingDowngrade", false.ToString() }
+
+                    }, 
                     Items = new List<SessionSubscriptionDataItemOptions> {
                         new SessionSubscriptionDataItemOptions {
-                            Plan = GetPlanIdFromSubscriptionType(type),
+                            Plan = this.GetPlanIdFromEnum(type),
                             Quantity = 1,
+
                         },
+                            
                     },
                 },
                 SuccessUrl = "https://" + hostHeader + "/Payment/Success/{CHECKOUT_SESSION_ID}",
                 CancelUrl = "https://" + hostHeader + "/cancel",
+
 
             };
 
@@ -62,54 +69,84 @@ namespace Revoow.Services
             return session;
         }
 
-        public Subscription ChangePlan(string userId, SubscriptionType type)
+        public Subscription UpgradeSubscription(RevoowUser user, SubscriptionType type)
         {
-            var user = this.userManager.FindByIdAsync(userId).Result;
-
-            bool isUpgrade = (int)type > (int)user.SubscriptionType;
-
-            return new Subscription();
-        }
- 
-        public Subscription UpdateSubscription(string userId, SubscriptionType type)
-        {
-            var user = this.userManager.FindByIdAsync(userId).Result;
-            var currentType = user.SubscriptionType;
-            var subscriptionId = user.SubscriptionId;
-
-            bool isUpgrade = (int)type > (int)currentType;
-
             var service = new SubscriptionService();
-            Subscription subscription = service.Get(subscriptionId);
+            Subscription subscription = service.Get(user.SubscriptionId);
 
             var items = new List<SubscriptionItemOptions> {
-                new SubscriptionItemOptions {               
+                new SubscriptionItemOptions {
                     Id = subscription.Items.Data[0].Id,
-                    Plan = GetPlanIdFromSubscriptionType(type),
-                },
-            };
+                    Plan = this.GetPlanIdFromEnum(type),
+                    Metadata = new Dictionary<string, string>
+                    {
+                        {"UserEmail", user.Email },
+                        {"PendingDowngrade", false.ToString() }
 
-            string behavior; 
-            if (isUpgrade)
-            {
-                behavior = "always_invoice";
-            }
-            else
-            {
-                behavior = "none";
+                    }
+                },
             };
 
             var options = new SubscriptionUpdateOptions
             {
                 CancelAtPeriodEnd = false,
-                ProrationBehavior = behavior,           
+                ProrationBehavior = "always_invoice",
                 Items = items
             };
 
-            subscription = service.Update(subscriptionId, options);
+            subscription = service.Update(user.SubscriptionId, options);
 
             return subscription;
+
         }
+
+        public Subscription DowngradeSubscription(RevoowUser user, SubscriptionType type)
+        {
+            var service = new SubscriptionService();
+            Subscription subscription = service.Get(user.SubscriptionId);
+
+            var items = new List<SubscriptionItemOptions> {
+                new SubscriptionItemOptions {
+                    Id = subscription.Items.Data[0].Id,
+                    Plan = this.GetPlanIdFromEnum(type),
+
+                },
+            };
+
+            var options = new SubscriptionUpdateOptions
+            {
+                CancelAtPeriodEnd = false,
+                ProrationBehavior = "none",
+                Metadata = new Dictionary<string, string>
+                {
+                    { "UserEmail", user.Email },
+                    { "PendingDowngrade", true.ToString() }
+                },
+                Items = items
+            };
+
+            subscription = service.Update(user.SubscriptionId, options);
+         
+            return subscription;
+        }
+
+        public Subscription ChangeDowngradePendingStatus(Subscription subscription, bool isPending)
+        {
+            var service = new SubscriptionService();
+
+            var options = new SubscriptionUpdateOptions
+            {
+                Metadata = new Dictionary<string, string>
+                {
+                    { "PendingDowngrade", isPending.ToString() }
+                },
+            };
+
+            return service.Update(subscription.Id, options);
+
+        }
+
+
 
         public Session RetrieveSession(string sessionId)
         {
@@ -144,14 +181,13 @@ namespace Revoow.Services
         public Subscription CancelSubscription(string subscriptionId)
         {
             var service = new SubscriptionService();
-            var cancelOptions = new SubscriptionCancelOptions
+            var options = new SubscriptionUpdateOptions
             {
-                
-                InvoiceNow = false,
+                CancelAtPeriodEnd = true,
                 Prorate = false,
             };
-            
-            var subscription = service.Cancel(subscriptionId, cancelOptions);
+           
+            var subscription = service.Update(subscriptionId, options);
             return subscription;
 
         }
@@ -163,24 +199,49 @@ namespace Revoow.Services
             return subscription;
         }
 
-        public string GetPlanIdFromSubscriptionType(SubscriptionType type)
+        public SubscriptionType GetEnumFromPlanId(string plan)
         {
-            string planId = "";
+            SubscriptionType type;
 
-            switch (type)
+            if (plan == _smallBusinessPlanId)
             {
-                case SubscriptionType.Small:
-                    planId = smallPlanId;
-                    break;
-                case SubscriptionType.Professional:
-                    planId = professionalPlanId;
-                    break;
+                type = SubscriptionType.Small;
+            }
+            else if (plan == _professionalPlanId)
+            {
+                type = SubscriptionType.Professional;
+            }
+            else
+            {
+                type = SubscriptionType.Starter;
             }
 
-            Debug.WriteLine("Plan id is " + planId);
+            return type;
+        }
+
+        public string GetPlanIdFromEnum(SubscriptionType type)
+        {
+            string planId;
+
+            if (type == SubscriptionType.Small)
+            {
+                planId = _smallBusinessPlanId;
+            }
+            else if (type == SubscriptionType.Professional)
+            {
+                planId = _professionalPlanId;
+            }
+            else
+            {
+                planId = "";
+            }
 
             return planId;
+        }
 
+        public bool HasPendingDowngrade(Subscription subscription)
+        {
+            return (subscription.Metadata["PendingDowngrade"].Contains("True"));
         }
 
     }

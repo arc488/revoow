@@ -8,24 +8,30 @@
 
     <div class="container">
         <h4>@ViewData["Title"]</h4>
-        <input id="currentPlanValue" value="@Model.CurrentType" />
-        <input id="isCanceled" value="@Model.IsCanceled.ToString()" />
+        <input  id="currentPlanValue" value="@Model.CurrentType" />
+        <input  id="isCanceled" value="@Model.IsCanceled.ToString()" />
 
         <div class="information">
+            @if (!String.IsNullOrEmpty(Model.StatusMessage))
+            {
+                <p class="alert alert-info">
+                    @Model.StatusMessage
+                </p>
+            }
             <p class="currentplan">
                 You are currently subscribed to the @Model.SubscriptionType.ToString() plan.
             </p>
-            @if (Model.SubscriptionType != SubscriptionType.Starter)
+            @if (Model.SubscriptionType != SubscriptionType.Starter && Model.IsCanceled == false)
             {
                 <p class="expiration">
                     Your subscription will renew on @Model.Expiration.
                 </p>
             }
 
-            @if (Model.IsCanceled)
+            @if (Model.SubscriptionType != SubscriptionType.Starter && Model.IsCanceled)
             {
                 <p class="cancelInfo">
-                    Your subscription has been cancelled or downgraded to Start plan and will expire on @Model.Expiration.
+                    Your subscription has been cancelled and will expire on @Model.Expiration.
                 </p>
             }
 
@@ -33,8 +39,8 @@
         <hr>
 
         <div class="upgrade">
-            <h4>Upgrade Plan</h4>
-            <partial name="_ChoosePlanPartial" />
+            <h4>Change Plan</h4>
+            <partial name="_ChangePlanPartial" />
 
             <form method="post">
                 <div class="form-group">
@@ -42,7 +48,7 @@
                         <option selected="selected" value="">Please select</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Upgrade</button>
+                <button type="submit" class="btn btn-primary">Change</button>
             </form>
         </div>
 
@@ -50,14 +56,14 @@
         <div class="cancel">
             <h4>Cancel Subscription</h4>
             <br>
-            <form>
+            <form method="post" >
                 <div class="form-group col-md-4">
-                    <label asp-for="Input.Password">Password</label>
-                    <input asp-for="Input.Password" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-4">
-                    <input type="submit" class="btn btn-danger">
+                    <input type="submit" class="btn btn-danger" asp-page-handler="CancelSubscription">
                 </div>
             </form>
         </div>

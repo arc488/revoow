@@ -5,8 +5,8 @@ var $cols = $('.card-pricing').click(function (e) {
     var plan = $(this).find('#PlanValue').val();
     $cols.removeClass(addclass);
     $(this).addClass(addclass);
-    $('button').removeClass("btn-primary").addClass('btn-outline-secondary');
-    $(this).find('button').addClass("btn-primary").removeClass('btn-outline-secondary');
+    $("button[name='choosePlanButton']").removeClass("btn-primary").addClass('btn-outline-secondary');
+    $(this).find("button[name='choosePlanButton']").addClass("btn-primary").removeClass('btn-outline-secondary');
     $SubscriptionTypeInput.val(plan).change();
 
 });

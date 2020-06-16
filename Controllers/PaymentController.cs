@@ -42,10 +42,11 @@ namespace Revoow.Controllers
         {
             var type = id;
             var hostHeader = Request.Host.ToString();
+            var user = userManager.GetUserAsync(User).Result;
 
             if (type != SubscriptionType.Starter)
             {
-                Session session = paymentService.CreateSession(type, hostHeader);
+                Session session = paymentService.CreateSession(type, hostHeader, user);
                 ViewBag.sessionId = session.Id;
                 return View();
             };
@@ -55,26 +56,26 @@ namespace Revoow.Controllers
 
         public async Task<IActionResult> Success(string id)
         {
-            var user = userManager.GetUserAsync(HttpContext.User).Result;
-            if (!string.IsNullOrEmpty(id))
-            {
-                var session = this.paymentService.RetrieveSession(id);
+            //var user = userManager.GetUserAsync(HttpContext.User).Result;
+            //if (!string.IsNullOrEmpty(id))
+            //{
+            //    var session = this.paymentService.RetrieveSession(id);
 
-                user.CustomerId = session.CustomerId;
-                user.SubscriptionId = session.SubscriptionId;
+            //    user.CustomerId = session.CustomerId;
+            //    user.SubscriptionId = session.SubscriptionId;
 
-                var subscription = this.paymentService.RetrieveSubscription(user.SubscriptionId);
+            //    var subscription = this.paymentService.RetrieveSubscription(user.SubscriptionId);
 
-                SubscriptionType type = (SubscriptionType)subscription.Quantity;
+            //    SubscriptionType type = (SubscriptionType)subscription.Quantity;
 
-                user.SubscriptionType = type;
-            }
-            else
-            {
-                user.SubscriptionType = SubscriptionType.Starter;
-            };
+            //    user.SubscriptionType = type;
+            //}
+            //else
+            //{
+            //    user.SubscriptionType = SubscriptionType.Starter;
+            //};
 
-            await userManager.UpdateAsync(user);
+            //await userManager.UpdateAsync(user);
 
             return View();
         }

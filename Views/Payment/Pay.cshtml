@@ -1,11 +1,25 @@
 ﻿
 @{
-    ViewData["Title"] = "Success";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+
 }
-    <script type="text/javascript"> 
-        var session = '@(ViewBag.sessionId)';
-        console.log(session);
+<html>
+<head>
+    <title>Loading...</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+    var session = '@(ViewBag.sessionId)';
+    console.log(session);
     </script>
-<h1>Pay</h1>
-<script src="~/scripts/stripeCheckout.js"></script>
+    <script src="~/scripts/stripeCheckout.js"></script>
+    <link href="~/css/PaymentLoading.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>Loading...</h1>
+
+    <div id="loading"></div>
+
+</body>
+
+</html>

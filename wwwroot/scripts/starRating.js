@@ -38,6 +38,7 @@ $(document).ready(function () {
 
         // JUST RESPONSE (Not needed)
         ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
+        $("#ratingValue").val(ratingValue);
         var msg = "";
         if (ratingValue > 1) {
             msg = "Thanks! You rated this " + ratingValue + " stars.";

@@ -1,0 +1,44 @@
+﻿@page
+@model UserPagesModel
+@{
+    ViewData["Title"] = "Your pages";
+    ViewData["ActivePage"] = ManageNavPages.UserPages;
+}
+
+<div class="row">
+    <a class="btn btn-secondary" asp-controller="Company" asp-action="Create">Create New Page</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Testimonials</th>
+            <th scope="col">Url</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            int pageCount = 1;
+        }
+        @foreach (var userPage in Model.RevoowPages)
+        {
+            var testimonialCount = 0;
+            if (userPage.Testimonials != null) 
+            {
+                testimonialCount = userPage.Testimonials.Count;
+            }
+            <tr onmouseover="ChangeColor(this, true);"
+                onmouseout="ChangeColor(this, false);"
+                onclick="DoNav('/@userPage.PageURL');"> 
+                <th scope="row">@pageCount</th>
+                <td>@userPage.CompanyName</td>
+                <td>@testimonialCount</td>
+                <td>@userPage.PageURL</td>
+            </tr>
+            pageCount++;
+        }
+    </tbody>
+</table>
