@@ -1,41 +1,17 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-button {
-    margin: 0 3px 10px 0;
-    padding-left: 2px;
-    padding-right: 2px;
-    width: 99px;
+body {
+    font-size:1.5rem;
 }
-
-    button:last-of-type {
-        margin: 0;
-    }
-
-p.borderBelow {
-    margin: 0 0 20px 0;
-    padding: 0 0 20px 0;
+.btn {
+    font-size:inherit;
 }
-
-video {
-    vertical-align: top;
-    --width: 25vw;
-    width: var(--width);
-    height: calc(var(--width) * 0.5625);
-}
-
-    video:last-of-type {
-        margin: 0 0 20px 0;
-    }
-
-    video#gumVideo {
-        margin: 0 20px 20px 0;
-    }
-
 a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
+    font-size:1.5em;
 }
 
 /* Provide sufficient contrast against white background */

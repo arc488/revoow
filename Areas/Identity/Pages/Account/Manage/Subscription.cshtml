@@ -8,8 +8,8 @@
 
     <div class="container">
         <h4>@ViewData["Title"]</h4>
-        <input  id="currentPlanValue" value="@Model.CurrentType" />
-        <input  id="isCanceled" value="@Model.IsCanceled.ToString()" />
+        <input hidden  id="currentPlanValue" value="@Model.CurrentType" />
+        <input hidden id="isCanceled" value="@Model.IsCanceled.ToString()" />
 
         <div class="information">
             @if (!String.IsNullOrEmpty(Model.StatusMessage))
