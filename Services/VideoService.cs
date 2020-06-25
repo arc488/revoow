@@ -3,6 +3,7 @@ using MediaToolkit.Model;
 using MediaToolkit.Options;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Web;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Revoow.Services
             var inputFile = new MediaFile { Filename =  videoPath};
             var outputFile = new MediaFile { Filename = thumbnailPath};
 
-            using (var engine = new Engine())
+            using (var engine = new Engine(@"~\wwwroot\ffmpeg.exe"))
             {
                 engine.GetMetadata(inputFile);
 
