@@ -25,18 +25,21 @@ namespace Revoow.Controllers
         private readonly ITestimonialRepository testimonialRepository;
         private readonly VideoService videoService;
         private readonly UserManager<RevoowUser> userManager;
+        private readonly BlobStorageService storageService;
         private readonly IMapper mapper;
 
         public PageController(IPageRepository pageRepository,
                               ITestimonialRepository testimonialRepository,
                               VideoService videoService,
                               UserManager<RevoowUser> userManager,
+                              BlobStorageService storageService,
                               IMapper mapper)
         {
             this.pageRepository = pageRepository;
             this.testimonialRepository = testimonialRepository;
             this.videoService = videoService;
             this.userManager = userManager;
+            this.storageService = storageService;
             this.mapper = mapper;
         }
 
@@ -95,14 +98,25 @@ namespace Revoow.Controllers
 
             if (testimonialCount <= user.MaxVideos)
             {
-                videoService.SaveVideo(file);
+                //videoService.SaveVideo(file);
+                byte[] fileData;
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    fileData = ms.ToArray();
+                }
+                string mimeType = file.ContentType;
+
+                var path = storageService.UploadFileToBlob(videoService.fileName, fileData, mimeType);
+
+
                 var thumbnail = videoService.GenerateThumbnail();
                 var testimonial = new Testimonial()
                 {
                     PageId = pageId,
                     Rating = ratingValue,
                     VideoName = videoService.fileName + ".webm",
-                    VideoPath = videoService.videoPath,
+                    VideoPath = path,
                     VideoThumbnail = thumbnail,
                     ReviewerName = reviewerName,
                 };
@@ -110,7 +124,7 @@ namespace Revoow.Controllers
                 page.Testimonials.Add(testimonial);
                 pageRepository.Update(page);
             }
-            redirectUrl = redirectUrl = Request.Scheme + "://" + Request.Host + "/" + page.PageURL;
+            redirectUrl = Request.Scheme + "://" + Request.Host + "/" + page.PageURL;
 
             return Json(new { url = redirectUrl });
 

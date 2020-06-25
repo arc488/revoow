@@ -53,12 +53,14 @@ namespace Revoow
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
             services.AddTransient<VideoService>();
             services.AddTransient<PaymentService>();
+            services.AddTransient<BlobStorageService>();
             services.AddTransient<StripeEventHandler>();
             var autoMapper = new MapperConfiguration(mc => mc.AddProfile(new AutoMapperProfile()));
             services.AddSingleton(autoMapper.CreateMapper());
 
             services.AddOptions();
             services.Configure<StripeOptions>(Configuration.GetSection("Stripe"));
+            services.Configure<BlobStorageOptions>(Configuration.GetSection("AzureStorage"));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
