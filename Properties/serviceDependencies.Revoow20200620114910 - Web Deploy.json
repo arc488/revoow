@@ -1,15 +1,9 @@
 {
   "dependencies": {
-    "secrets1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.KeyVault/vaults/Revoowvault",
-      "type": "secrets.keyVault",
-      "connectionId": "ASPNETCORE_HOSTINGSTARTUP__KEYVAULT__CONFIGURATIONVAULT",
-      "secretStore": "AzureAppSettings"
-    },
     "mssql1": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup')]/providers/Microsoft.Sql/servers/revoow/databases/RevoowDB",
       "type": "mssql.azure",
-      "connectionId": "ASPNETCORE_HOSTINGSTARTUP__KEYVAULT__CONFIGURATIONVAULT",
+      "connectionId": "DefaultConnection",
       "secretStore": null
     }
   }
