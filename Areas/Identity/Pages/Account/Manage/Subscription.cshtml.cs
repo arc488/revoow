@@ -70,7 +70,8 @@ namespace Revoow.Areas.Identity.Pages.Account.Manage
                 if (user.SubscriptionType != SubscriptionType.Starter)
                 {
                     var subscription = _paymentService.RetrieveSubscription(user.SubscriptionId);
-                    Expiration = subscription.CurrentPeriodEnd.Value.ToShortDateString();
+                    //Expiration = subscription.CurrentPeriodEnd.Value.ToShortDateString();
+                    Expiration = subscription.CurrentPeriodEnd.ToShortDateString();
                 }
                 else
                 {
