@@ -17,7 +17,7 @@ namespace Revoow.Services
     public class BlobStorageService
     {
         string accessKey = string.Empty;
-        string downloadPath = @"D:\local\Temp";
+        string downloadPath = @"D:\local\Temp\";
 
         public BlobStorageService(IOptions<BlobStorageOptions> options)
         {

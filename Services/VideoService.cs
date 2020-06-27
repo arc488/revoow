@@ -20,7 +20,7 @@ namespace Revoow.Services
         public string fileName;
         public string thumbnailPath;
         public string videoPath;
-        public string location = @"D:\local\Temp";
+        public string location = @"D:\local\Temp\";
 
         public VideoService(BlobStorageService storageService)
         {
@@ -36,7 +36,7 @@ namespace Revoow.Services
             var downloadedFile = await storageService.GetFileFromStorage(fileName);
             var inputFile = new MediaFile { Filename =  downloadedFile };
 
-            var outputFile = new MediaFile { Filename = thumbnailPath };
+            var outputFile = new MediaFile { Filename = thumbnailPath};
 
             using (var engine = new Engine(@"D:\home\site\wwwroot\wwwroot\ffmpeg.exe"))
             {
