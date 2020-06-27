@@ -69,7 +69,7 @@ namespace Revoow.Services
 
                 // Download the blob's contents and save it to a file
                 BlobDownloadInfo download = await blob.DownloadAsync();
-                using (FileStream file = File.OpenWrite(downloadPath))
+                using (FileStream file = File.OpenWrite(downloadPath + fileName))
                 {
                     await download.Content.CopyToAsync(file);
                     tempFilePath = file.Name;
