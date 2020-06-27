@@ -62,7 +62,6 @@ namespace Revoow.Services
         {
             string tempFilePath = String.Empty;
             BlobContainerClient container = new BlobContainerClient(accessKey, "uploads");
-            await container.CreateAsync();
             try
             {
                 // Get a reference to a blob named "sample-file"
