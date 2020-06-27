@@ -33,7 +33,7 @@ namespace Revoow.Services
             var inputFile = new MediaFile { Filename =  videoPath};
             var outputFile = new MediaFile { Filename = thumbnailPath};
 
-            using (var engine = new Engine(@"~\wwwroot\ffmpeg.exe"))
+            using (var engine = new Engine(@"D:\home\site\wwwroot\wwwroot\ffmpeg.exe"))
             {
                 engine.GetMetadata(inputFile);
 
