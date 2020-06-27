@@ -110,7 +110,7 @@ namespace Revoow.Controllers
                 var path = storageService.UploadFileToBlob(videoService.fileName, fileData, mimeType);
 
 
-                var thumbnail = videoService.GenerateThumbnail();
+                var thumbnail = videoService.GenerateThumbnail(videoService.fileName).Result;
                 var testimonial = new Testimonial()
                 {
                     PageId = pageId,

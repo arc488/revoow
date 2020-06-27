@@ -14,24 +14,29 @@ namespace Revoow.Services
 {
     public class VideoService
     {
+        private readonly BlobStorageService storageService;
+
         //private string location = Environment.GetEnvironmentVariable("TEMP");
-        private string location = @"wwwroot/videos";
         public string fileName;
         public string thumbnailPath;
         public string videoPath;
+        public string location = @"D:\local\Temp";
 
-        public VideoService()
+        public VideoService(BlobStorageService storageService)
         {
             //filename is current time stripped of all non numbers
             this.fileName = Regex.Replace(DateTime.Now.ToString(), "[^0-9]", "");
             this.videoPath = Path.Combine(location, fileName + ".webm");
             this.thumbnailPath = Path.Combine(location, fileName + ".jpg");
+            this.storageService = storageService;
         }
 
-        public byte[] GenerateThumbnail()
+        public async Task<byte[]> GenerateThumbnail(string fileName)
         {
-            var inputFile = new MediaFile { Filename =  videoPath};
-            var outputFile = new MediaFile { Filename = thumbnailPath};
+            var downloadedFile = await storageService.GetFileFromStorage(fileName);
+            var inputFile = new MediaFile { Filename =  downloadedFile };
+
+            var outputFile = new MediaFile { Filename = thumbnailPath };
 
             using (var engine = new Engine(@"D:\home\site\wwwroot\wwwroot\ffmpeg.exe"))
             {
