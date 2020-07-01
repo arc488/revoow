@@ -1,6 +1,6 @@
 ﻿
 window.addEventListener("load", function () {
-    var stripe = Stripe('pk_test_zsq8UWsyLZQDQcaZMtpDkNq600GzpW2BUf');
+    var stripe = Stripe('pk_live_fvwsjXzOJtbLg6cl79zT5NDX00lsUedvue');
     console.log("Session is is " + session);
     stripe.redirectToCheckout({
         // Make the id field from the Checkout Session creation API response
