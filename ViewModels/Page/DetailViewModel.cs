@@ -10,7 +10,7 @@ namespace Revoow.ViewModels.Revoow
     {
         public byte[] Logo { get; set; }
         public string CompanyName { get; set; }
-        public string RevoowURL { get; set; }
+        public string PageURL { get; set; }
         public Testimonial[] Testimonials { get; set; }
         public int CompanyRating { get; set; }
         public bool IsVideoLimitReached { get; set; }
