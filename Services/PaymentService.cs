@@ -52,6 +52,7 @@ namespace Revoow.Services
                         new SessionSubscriptionDataItemOptions {
                             Plan = this.GetPlanIdFromEnum(type),
                             Quantity = 1,
+                            
 
                         },
                             
