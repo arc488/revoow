@@ -1,0 +1,105 @@
+﻿@model DetailViewModel
+
+@{
+    Layout = null;
+}
+
+
+<html>
+
+<head>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/detail.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/4ff92ff337.js"></script>
+    <script src="~/scripts/popupVideo.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-8 shadow-lg" style="padding-right: 0px; padding-left: 0px;">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                    <a class="navbar-brand" href="#">@Model.CompanyName</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="ml-auto">
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                @*<li class="nav-item active">
+                                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Link</a>
+                                </li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class="company-info justify-content-center">
+                    <p id="company-name">@Model.CompanyName</p>
+                    <div id="company-rating" class="justify-content-center">
+                        @for (int i = 0; i < Model.CompanyRating; i++)
+                        {
+                            <i class="fa fa-star" style="color:gold"></i>
+                        }
+                        @for (int i = 0; i < 5 - Model.CompanyRating; i++)
+                        {
+                            <i class="fa fa-star" style="color:grey"></i>
+
+                        }
+                    </div>
+                    <div id="company-link">
+                        @*<a href="">Visit company website</a>*@
+                    </div>
+                </div>
+                <div class="add-testimonial">
+                    @if (!Model.IsVideoLimitReached)
+                    {
+                        <a href="/@Model.PageURL/Upload" class="btn btn-primary btn-lg">Add Testimonial</a>
+                    }
+                </div>
+                <div class="videos" style="margin-top: 1rem; margin-bottom: 2rem;">
+                    <div class="row justify-content-center">
+                        @foreach (var testimonial in Model.Testimonials)
+                        {
+                            <div class="testimonial card" style="width: 18rem;">
+                                <div class="card-header">Review by @testimonial.ReviewerName</div>
+                                <div id="overlay">
+                                    <div id="popup">
+                                        <div id="close">X</div>
+                                        <h2>Review by @testimonial.ReviewerName</h2>
+                                        <video width="100%" controls>
+                                            <source src="@testimonial.VideoPath" />
+                                            <h4>Your browser does not support this video player</h4>
+                                        </video>
+                                    </div>
+                                </div>
+                                <img class="card-img-top" src="data:image;base64,@Convert.ToBase64String(testimonial.VideoThumbnail)" />
+
+                                <div class="card-body">
+                                    <h5 class="card-title video-rating">
+                                        @for (int i = 0; i < testimonial.Rating; i++)
+                                        {
+                                            <i class="fa fa-star" style="color:gold"></i>
+                                        }
+                                        @for (int i = 0; i < 5 - testimonial.Rating; i++)
+                                        {
+                                            <i class="fa fa-star" style="color:grey"></i>
+
+                                        }
+                                    </h5>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

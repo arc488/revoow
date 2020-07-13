@@ -1,0 +1,128 @@
+﻿.navbar {
+    float: none;
+    padding-left: 15%;
+    padding-right: 15%;
+    font-size: 1.5em;
+}
+
+    .navbar .navbar-brand {
+        font-size: 1.8em;
+    }
+
+#company-info i {
+    padding-right: 18px;
+    vertical-align: middle;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.thumbnail {
+    background: none;
+    border: none;
+}
+
+.video-rating i {
+    margin: 0px;
+    padding: 0px;
+}
+
+.container {
+    margin-top: 3em;
+}
+
+#company-rating {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+    #company-rating i {
+        padding-right: 15px;
+        vertical-align: middle;
+        display: inline;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #company-rating i {
+        color: gold;
+        font-size: 2em;
+    }
+
+/*Reviws */
+
+.videos {
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
+    .videos .card {
+        border: none;
+        width: 14rem;
+        margin-right: 1em;
+        margin-left: 1em;
+        margin-top: 2em;
+    }
+
+    .videos .card-header {
+        font-weight: normal;
+        font-size: 1.2em;
+    }
+
+    .videos .video-rating {
+        margin-top: 8px;
+        color: gold;
+        font-size: 1.4em;
+    }
+
+button {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 3px;
+}
+
+#overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    z-index: 1;
+}
+
+#popup {
+    max-width: 600px;
+    width: 80%;
+    padding: 20px;
+    position: relative;
+    background: #fff;
+    margin: 20px auto;
+}
+
+#close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #000;
+}
+
+/* info card */
+
+#info-card .card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}

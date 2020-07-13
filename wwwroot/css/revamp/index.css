@@ -1,0 +1,84 @@
+﻿
+.navbar {
+    float: none;
+    padding-left: 15%;
+    padding-right: 15%;
+    font-size: 1.5em;
+}
+
+    .navbar .navbar-brand {
+        font-size: 1.8em;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        padding-left: 1em;
+    }
+
+.container img {
+    max-width: 15rem;
+}
+
+.container .image {
+    padding: 5px;
+}
+
+
+#hook {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+    #hook a {
+        font-weight: bold;
+    }
+
+#steps {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+    #steps .row {
+        background: #007bff;
+        padding-top: 20px;
+    }
+
+    #steps div {
+        padding: 5px;
+    }
+
+    #steps p {
+        margin-top: 10px;
+        margin-bottom: 0px;
+        color: white;
+        font-size: 1.5em;
+    }
+
+#checks .check {
+    color: #0ac547;
+    font-size: 15px;
+    text-align: center;
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    background-color: white;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 6px solid #0ac547;
+}
+
+#checks i {
+    color: #0ac547;
+    padding-top: 15px;
+    font-size: 3rem;
+}
+
+#checks span {
+    display: inline-block;
+    font-size: 2rem;
+    padding-left: 10px;
+}
+
+#plans {
+    margin-top: 30px;
+}

@@ -1,0 +1,152 @@
+﻿body {
+    background: #056AD2;
+}
+
+.container {
+    background: white;
+    border-radius: 25px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+#company-rating i {
+    padding-right: 1rem;
+    vertical-align: middle;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+    color: gold;
+    font-size: 2rem;
+}
+
+#instructions {
+    background: #EAE9E9;
+    padding: 2rem;
+    padding-bottom: 1rem;
+}
+
+    #instructions i {
+        font-size: 6rem;
+        color: #056AD2;
+        margin-bottom: 1rem;
+    }
+
+    #instructions h5 {
+        font-size: 2rem;
+    }
+
+
+/*Video*/
+
+.video .row {
+    justify-content: center;
+    background: #ffffff;
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+    .video .row .directions {
+        font-size: 1.1em;
+    }
+
+label.error {
+    width: 100%;
+    font-size: 0.8em;
+    color: #D8000C;
+    background-color: #FFD2D2;
+    margin: 10px 0px;
+    padding: 8px;
+    border-radius: 0.5em;
+}
+
+video {
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    background: black;
+    box-shadow: 10px 5px 10px rgba(0,0,0,0.4);
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.controls .row {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
+
+.controls button {
+    height: 50px;
+    width: 50px;
+}
+
+#record {
+    color: red;
+}
+
+
+/* Rating */
+
+.rating .row {
+    background: #EAE9E9;
+    justify-content: center;
+}
+
+.rating #stars {
+    padding-top: 20px;
+}
+
+.rating .success-box {
+    padding-bottom: 10px;
+}
+
+.submit-video .row {
+    justify-content: center;
+    background: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/*Stars
+
+/* Rating Star Widgets Style */
+.rating-stars ul {
+    list-style-type: none;
+    padding: 0px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+    .rating-stars ul > li.star {
+        display: inline-block;
+    }
+
+        /* Idle State of the stars */
+        .rating-stars ul > li.star > i.fa {
+            font-size: 2.5em; /* Change the size of the stars */
+            color: white; /* Color on idle state */
+        }
+
+        /* Hover state of the stars */
+        .rating-stars ul > li.star.hover > i.fa {
+            color: #FFCC36;
+        }
+
+        /* Selected state of the stars */
+        .rating-stars ul > li.star.selected > i.fa {
+            color: #FF912C;
+        }
+
+.submit-video input {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
