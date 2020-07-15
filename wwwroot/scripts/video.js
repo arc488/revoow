@@ -9,7 +9,7 @@ const stopRecordingClassName = "fa fa-stop fa-lg";
 
 const errorMsgElement = document.querySelector("span#errorMsg");
 const recordButton = document.querySelector("button#record");
-const uploadButton = document.querySelector("button#upload");
+const uploadButton = document.querySelector("input#upload");
 const reviewerNameInput = document.querySelector("input#reviewerName");
 const pageIdInput = document.querySelector("input#pageId");
 const companyNameInput = document.querySelector("input#companyName");
