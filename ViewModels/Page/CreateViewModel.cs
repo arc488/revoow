@@ -21,11 +21,16 @@ namespace Revoow.ViewModels.Revoow
         [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Page address can only contain letters and numbers.")]
         public string PageURL { get; set; }
         [Required]
+        [Display(Name = "Website address")]
         public string WebsiteUrl { get; set; }
         [Required]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
         [Required]
+        [Display(Name = "Address")]
         public string Address { get; set; }
+        [Required]
+        [Display(Name = "Description")]
         public string Description { get; set; }
         public List<String> URLsInUse { get; set; }
         public List<String> NamesInUse { get; set; }

@@ -15,6 +15,11 @@ namespace Revoow.Validations
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return new ValidationResult("Company name cannot be empty");
+            }
+
             var companyName = value.ToString();
             Debug.WriteLine("Company name is: " + companyName);
             var appDbContext = (AppDbContext)validationContext

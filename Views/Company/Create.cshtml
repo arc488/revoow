@@ -59,6 +59,17 @@
                     <div><span asp-validation-for="PhoneNumber" class="text-danger"></span></div>
                 </div>
                 <div class="form-group">
+                    <label asp-for="Address"></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <i class="input-group-text fa fa-phone"></i>
+                        </div>
+                        <input asp-for="Address" class="form-control" type="text" autocomplete="off" />
+
+                    </div>
+                    <div><span asp-validation-for="Address" class="text-danger"></span></div>
+                </div>
+                <div class="form-group">
                     <label asp-for="Description"></label>
                     <div class="input-group">
                         <div class="input-group-prepend">
