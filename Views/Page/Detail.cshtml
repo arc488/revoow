@@ -99,10 +99,10 @@
                             <div id="popup">
                                 <div id="close">X</div>
                                 <h2>This is a popup</h2>
-                                <video width="100%" src="data:image;base64,@Convert.ToBase64String(testimonial.VideoThumbnail)"></video>
+                                <video width="100%" src="@testimonial.VideoPath"></video>
                             </div>
                         </div>
-                        <img src="@testimonial.VideoPath" class="card-img-top" alt="...">
+                        <img src="data:image;base64,@Convert.ToBase64String(testimonial.VideoThumbnail)" class="card-img-top" alt="...">
                     </div>
                 }
             </div>
