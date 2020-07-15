@@ -11,6 +11,10 @@ namespace Revoow.Validations
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return new ValidationResult("This field cannot be empty.");
+            }
             var pageURL = value.ToString();
             var appDbContext = (AppDbContext)validationContext
                          .GetService(typeof(AppDbContext));
