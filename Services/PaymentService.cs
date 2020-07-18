@@ -58,8 +58,8 @@ namespace Revoow.Services
                             
                     },
                 },
-                SuccessUrl = "https://" + hostHeader + "/Payment/Success/{CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://" + hostHeader + "/cancel",
+                SuccessUrl = "https://" + hostHeader + "/company/create",
+                CancelUrl = "https://" + hostHeader + "/",
 
 
             };
