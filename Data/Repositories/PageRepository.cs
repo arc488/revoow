@@ -24,6 +24,15 @@ namespace Revoow.Data.Repositories
             return page;
         }
 
+        public override IEnumerable<Page> GetAll()
+        {
+            var pages = appDbContext.Pages
+                        .Include(p => p.Testimonials)
+                        .Include(p => p.CreatedBy)
+                        .ToList();
+            return pages;
+        }
+
         public Page GetByUrl(string pageUrl)
         {
             var page = appDbContext.Pages

@@ -1,4 +1,4 @@
-﻿$("#copyLink").click(function () {
+﻿$(".copyLink").click(function () {
     var copyText = $(this).parent().find("input").val();
 
 

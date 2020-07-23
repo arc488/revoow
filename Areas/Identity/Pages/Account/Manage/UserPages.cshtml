@@ -9,7 +9,7 @@
 
 
 <div class="row p-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <a class="btn btn-secondary" asp-controller="Company" asp-action="Create">Create New Page</a>
     </div>
     <div id="tip" class="col-md">
@@ -42,7 +42,6 @@
 
                 int testimonialCountAll = 0;
                 int testimonialCountWeek = 0;
-
                 if (item.Testimonials != null)
                 {
                     testimonialCountAll = item.Testimonials.Count();
@@ -56,7 +55,7 @@
                 <td><a href="/@item.PageURL">Visit Page</a></td>
 
                 <td class="popup">
-                    <a id="copyLink">Click to Copy</a>
+                    <a class="copyLink">Click to Copy</a>
                     <input hidden type="text" value="www.revoow.me/@item.PageURL/upload" id="shareLink">
                     <span class="popuptext" id="copiedPopup">Link Copied</span>
 
