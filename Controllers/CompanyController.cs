@@ -44,11 +44,11 @@ namespace Revoow.Controllers
 
             var page = this.mapper.Map<CreateViewModel, Page>(viewModel);
 
-            using (var ms = new MemoryStream())
-            {
-                file.CopyTo(ms);
-                page.Logo = ms.ToArray();
-            };
+            //using (var ms = new MemoryStream())
+            //{
+            //    file.CopyTo(ms);
+            //    page.Logo = ms.ToArray();
+            //};
             
 
             this.pageRepository.Add(page);

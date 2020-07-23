@@ -9,7 +9,7 @@ namespace Revoow.ViewModels.Revoow
 {
     public class CreateViewModel
     {
-        public byte[] Logo { get; set; }
+        //public byte[] Logo { get; set; }
         [Required, StringLength(30, MinimumLength = 2, ErrorMessage = "Address must be between 2 and 30 characters long")]
         [Display(Name = "Company Name")]
         [CompanyNameIsUnique]

@@ -5,40 +5,64 @@
     ViewData["ActivePage"] = ManageNavPages.UserPages;
 }
 
-<div class="row">
-    <a class="btn btn-secondary" asp-controller="Company" asp-action="Create">Create New Page</a>
+<link rel="stylesheet" href="~/css/revamp/userpages.css" />
+
+
+<div class="row p-3">
+    <div class="col-md-4">
+        <a class="btn btn-secondary" asp-controller="Company" asp-action="Create">Create New Page</a>
+    </div>
+    <div id="tip" class="col-md">
+        <i class="fa fa-lightbulb"></i>
+        <span class="align-middle"><span style="font-weight: 800">Tip:</span> Send your sharable link to your customers to collect Revoows!</span>
+    </div>
+
 </div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Testimonials</th>
-            <th scope="col">Url</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-
-            int pageCount = 1;
-        }
-        @foreach (var userPage in Model.RevoowPages)
-        {
-            var testimonialCount = 0;
-            if (userPage.Testimonials != null) 
-            {
-                testimonialCount = userPage.Testimonials.Count;
-            }
-            <tr onmouseover="ChangeColor(this, true);"
-                onmouseout="ChangeColor(this, false);"
-                onclick="DoNav('/@userPage.PageURL');"> 
-                <th scope="row">@pageCount</th>
-                <td>@userPage.CompanyName</td>
-                <td>@testimonialCount</td>
-                <td><a href="/@userPage.PageURL">@userPage.PageURL</a></td>
+<div class="table-responsive text-center">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Page</th>
+                <th scope="col">Revoows(all)</th>
+                <th scope="col">Revoows(30 day)</th>
+                <th scope="col">View Revoows</th>
+                <th scope="col">Shareable Link</th>
             </tr>
-            pageCount++;
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+
+                int pageCount = 0;
+
+            }
+            @foreach (var item in Model.RevoowPages)
+            {
+                pageCount++;
+
+                int testimonialCountAll = 0;
+                int testimonialCountWeek = 0;
+
+                if (item.Testimonials != null)
+                {
+                    testimonialCountAll = item.Testimonials.Count();
+                    testimonialCountWeek = item.Testimonials.Where(t => t.TimeCreated >= DateTime.Today.AddDays(-7)).Count();
+                }
+            <tr>
+                <th scope="row">@pageCount</th>
+                <td>@item.CompanyName</td>
+                <td>@testimonialCountAll</td>
+                <td>@testimonialCountWeek</td>
+                <td><a href="/@item.PageURL">Visit Page</a></td>
+
+                <td class="popup">
+                    <a id="copyLink">Click to Copy</a>
+                    <input hidden type="text" value="www.revoow.me/@item.PageURL/upload" id="shareLink">
+                    <span class="popuptext" id="copiedPopup">Link Copied</span>
+
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
