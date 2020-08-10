@@ -4,6 +4,56 @@
 }
 
 
+#secondsLeft {
+    border: 0;
+    color: #FF0000;
+    outline: none;
+    font-weight: bold;
+    font-weight: 1000;
+    font-size: 1.8rem;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#timer {
+    color: black;
+}
+
+    #timer #secondsLabel {
+        color: red;
+    }
+
+    #timer label {
+        height: 3rem;
+        font-weight: 1000;
+        font-size: 1.8rem;
+    }
+
+    #timer .col {
+        padding: 0;
+    }
+
+#instructions {
+    background: #eae9e9;
+    padding: 2rem;
+    padding-bottom: 1rem;
+}
+
+    #instructions i {
+        font-size: 6rem;
+        color: #056ad2;
+        margin-bottom: 1rem;
+    }
+
+    #instructions h5 {
+        font-size: 2rem;
+    }
+
+
 .company {
     text-align:center;
 }

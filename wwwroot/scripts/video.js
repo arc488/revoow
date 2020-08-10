@@ -1,4 +1,21 @@
-﻿const mediaSource = new MediaSource();
+﻿var time = 30;
+var counter;
+var secondsLeft = document.getElementById('secondsLeft');
+
+function startCounter() {
+    time = 30;
+    counter = setInterval(decreaseSecond, 1000);
+}
+
+function decreaseSecond() {
+    time = time - 1;
+    secondsLeft.value = time;
+    if (time <= 0) {
+        clearInterval(counter);
+    }
+}
+
+const mediaSource = new MediaSource();
 mediaSource.addEventListener("sourceopen", handleSourceOpen, false);
 let mediaRecorder;
 var recordedBlobs;
@@ -15,16 +32,19 @@ const pageIdInput = document.querySelector("input#pageId");
 const companyNameInput = document.querySelector("input#companyName");
 const gumVideo = document.querySelector("video#gum");
 const blobLengthInput = document.querySelector("#blobLength");
+var isRecording = false;
 
 recordButton.addEventListener("click", () => {
     var icon = recordButton.children[0];
     if (icon.className === startRecordingClassName) {
         startRecording();
+        startCounter();
     } else {
         stopRecording();
         icon.className = startRecordingClassName;
         playButton.disabled = false;
         uploadButton.disabled = false;
+        clearInterval(counter);
     }
 });
 
