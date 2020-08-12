@@ -34,6 +34,12 @@
                     @if (SignInManager.IsSignedIn(User) == false)
                     {
                         <li class="nav-item active">
+                            <a class="nav-link" href="/home/privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/home/terms">ToS</a>
+                        </li>
+                        <li class="nav-item active">
                             <a class="nav-link" href="#steps">How It Works</a>
                         </li>
                         <li class="nav-item active">
@@ -63,6 +69,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - Revoow - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a asp-area="" asp-controller="Home" asp-action="Terms">Terms of Service</a>
         </div>
     </footer>
 
