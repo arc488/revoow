@@ -2,6 +2,12 @@
     background: #056AD2;
 }
 
+
+#agreement {
+    margin-top: 6px;
+    margin-right: 1rem;
+}
+
 #secondsLeft {
     border: 0;
     color: #FF0000;

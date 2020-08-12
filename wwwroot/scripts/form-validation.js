@@ -24,6 +24,9 @@ $(function () {
             else if (element.attr("name") == "blobLength") {
                 $("#videoError").show().text(error[0].textContent);
             }
+            else if (element.attr("name") == "agreement") {
+                $("#agreementError").show().text(error[0].textContent);
+            }
             // Default position: if no match is met (other fields)
             else {
                 console.log("Error boxes not found");
@@ -45,6 +48,7 @@ $(function () {
             },
 
             ratingValue: "required",
+            agreement: "required",
         },
         // Specify validation error messages
         messages: {
@@ -56,6 +60,9 @@ $(function () {
             blobLength: {
                 required: "Please record a short video",
                 minlength: "Please record a short video"
+            },
+            agreement: {
+                required: "You must read and agree with our terms of service and privacy policy",
             },
         },
         // Make sure the form is submitted to the destination defined
