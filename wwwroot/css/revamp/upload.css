@@ -2,6 +2,52 @@
     background: #056AD2;
 }
 
+#secondsLeft {
+    border: 0;
+    color: #FF0000;
+    outline: none;
+    font-weight: bold;
+    font-weight: 1000;
+    font-size: 1.8rem;
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#timer {
+    color: black;
+}
+
+    #timer #secondsLabel {
+        color: red;
+    }
+
+    #timer label {
+        height: 3rem;
+        font-weight: 1000;
+        font-size: 1.8rem;
+    }
+
+    #timer .col {
+        padding: 0;
+    }
+
+
+.errorTxt {
+    width: 100%;
+    font-size: 0.8em;
+    color: #D8000C;
+    background-color: #FFD2D2;
+    margin: 10px 0px;
+    padding: 8px;
+    border-radius: 0.5em;
+}
+
+
+
 .container {
     background: white;
     border-radius: 25px;
